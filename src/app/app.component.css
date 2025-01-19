@@ -1,0 +1,31 @@
+.btn {
+  padding: 0.5rem 1rem;
+  border: 1px solid #ccc;
+  border-radius: 0.25rem;
+  background-color: #f9f9f9;
+  cursor: pointer;
+}
+
+.btn:hover {
+  background-color: #e2e2e2;
+}
+
+.btn.bg-blue-500 {
+  background-color: #3b82f6;
+}
+
+.btn.bg-blue-500:hover {
+  background-color: #2563eb;
+}
+
+.grid {
+  display: grid;
+}
+
+.grid-cols-2 {
+  grid-template-columns: repeat(2, 1fr);
+}
+
+.gap-8 {
+  gap: 2rem;
+}
