@@ -1,0 +1,91 @@
+<div class="p-6">
+  <h1 class="text-2xl font-bold mb-4">Modifier les styles</h1>
+
+  <ul>
+    <li *ngFor="let style of styles; let i = index" class="flex items-center space-x-4 mb-4">
+      <img [src]="style.imgSrc" alt="Style Image" class="w-16 h-16 rounded shadow" />
+      <p>{{ style.title }}</p>
+
+      <button
+        class="px-2 py-1 bg-yellow-500 text-white rounded"
+        (click)="openEditModal(i)"
+      >
+        -
+      </button>
+
+      <button
+        class="px-2 py-1 bg-red-500 text-white rounded"
+        (click)="deleteStyle(i)"
+      >
+        X
+      </button>
+    </li>
+  </ul>
+
+  <button
+    class="mt-4 px-6 py-3 bg-green-500 text-white rounded-lg"
+    (click)="openCreateModal()"
+  >
+    Créer un nouveau style
+  </button>
+
+  <button
+    class="mt-4 ml-4 px-6 py-3 bg-blue-500 text-white rounded-lg"
+    (click)="goBack()"
+  >
+    Retour
+  </button>
+
+  <div *ngIf="showEditModal" class="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
+    <div class="bg-white p-6 rounded shadow-md">
+      <h2 class="text-lg font-bold mb-4">Modifier le style</h2>
+      <input
+        type="text"
+        class="border rounded px-3 py-2 w-full mb-4"
+        [(ngModel)]="editedStyleTitle"
+        placeholder="Nouveau nom du style"
+      />
+      <button
+        class="px-4 py-2 bg-blue-500 text-white rounded mr-2"
+        (click)="saveEdit()"
+      >
+        Enregistrer
+      </button>
+      <button
+        class="px-4 py-2 bg-gray-500 text-white rounded"
+        (click)="closeEditModal()"
+      >
+        Annuler
+      </button>
+    </div>
+  </div>
+
+  <div *ngIf="showCreateModal" class="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
+    <div class="bg-white p-6 rounded shadow-md">
+      <h2 class="text-lg font-bold mb-4">Créer un nouveau style</h2>
+      <input
+        type="text"
+        class="border rounded px-3 py-2 w-full mb-4"
+        [(ngModel)]="newStyleTitle"
+        placeholder="Nom du style"
+      />
+      <input
+        type="file"
+        class="border rounded px-3 py-2 w-full mb-4"
+        (change)="onFileSelected($event)"
+      />
+      <button
+        class="px-4 py-2 bg-green-500 text-white rounded mr-2"
+        (click)="saveCreate()"
+      >
+        Ajouter
+      </button>
+      <button
+        class="px-4 py-2 bg-gray-500 text-white rounded"
+        (click)="closeCreateModal()"
+      >
+        Annuler
+      </button>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,36 @@
+<div class="flex h-screen">
+  <div class="w-1/4 bg-gray-100 p-4 overflow-y-auto">
+    <h2 class="text-lg font-semibold mb-4">Historique des scénarios</h2>
+    <ul class="space-y-2">
+      <li
+        *ngFor="let discussion of discussions; let i = index"
+        (click)="selectDiscussion(i)"
+        class="p-2 cursor-pointer rounded-md hover:bg-gray-200"
+        [class.bg-blue-200]="i === selectedDiscussionIndex"
+      >
+        {{ discussion.name }}
+      </li>
+    </ul>
+  </div>
+
+  <div class="flex-1 p-6">
+    <div class="mt-8 p-6 bg-gray-50 rounded-lg shadow-inner">
+      <h2 class="text-xl font-bold mb-4">Scénario généré</h2>
+      <div class="border p-4 rounded-md bg-white h-64 overflow-y-auto shadow-md">
+        <p *ngIf="selectedDiscussionIndex !== null">
+          {{ discussions[selectedDiscussionIndex]?.scenario || 'Aucun scénario généré.' }}
+        </p>
+        <p *ngIf="selectedDiscussionIndex === null" class="text-gray-500">
+          Sélectionnez une discussion à gauche ou générez un nouveau scénario.
+        </p>
+      </div>
+
+      <button
+        class="mt-4 px-4 py-2 rounded-full bg-blue-500 text-white hover:bg-blue-600 shadow-lg hover:shadow-xl transition-all"
+        (click)="generateNewScenario()"
+      >
+        Générer un nouveau scénario
+      </button>
+    </div>
+  </div>
+</div>
