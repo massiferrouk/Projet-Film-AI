@@ -1,0 +1,21 @@
+app-movie-card.selected {
+    border: 4px solid #2563eb;
+    border-radius: 12px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); 
+    transform: scale(1.05);
+    transition: all 0.2s ease-in-out;
+  }
+  app-movie-card {
+    border: 2px solid transparent;
+    transition: all 0.2s ease-in-out;
+  }
+  
+  app-movie-card:hover {
+    border: 2px solid #94a3b8;
+    transform: scale(1.02);
+  }
+  
+  app-movie-card.selected:hover {
+    transform: scale(1.1);
+  }
+  

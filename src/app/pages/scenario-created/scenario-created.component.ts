@@ -13,7 +13,7 @@ import { FormsModule } from '@angular/forms';
 export class ScenarioCreatedComponent {
   selectedCharacters = 1;
   userPlot: string = '';
-  charactersArray: { name: string; trait: string; appearance: string }[] = [];
+  charactersArray: { name: string; trait: string[]; appearance: string }[] = [];
 
   constructor(private router: Router) {
     this.updateCharactersArray();
@@ -25,10 +25,9 @@ export class ScenarioCreatedComponent {
   }
 
   updateCharactersArray() {
-    // Ajuster la taille du tableau `charactersArray` en fonction du nombre sélectionné
     this.charactersArray = Array.from({ length: this.selectedCharacters }, () => ({
       name: '',
-      trait: 'courageux',
+      trait: [],
       appearance: 'grand',
     }));
   }
@@ -42,4 +41,18 @@ export class ScenarioCreatedComponent {
       },
     });
   }
+
+  onTraitChange(characterIndex: number, trait: string, event: Event) {
+    const isChecked = (event.target as HTMLInputElement).checked;
+  
+    if (isChecked) {
+      if (!this.charactersArray[characterIndex].trait.includes(trait)) {
+        this.charactersArray[characterIndex].trait.push(trait);
+      }
+    } else {
+      this.charactersArray[characterIndex].trait =
+        this.charactersArray[characterIndex].trait.filter(t => t !== trait);
+    }
+  }
+  
 }

@@ -16,9 +16,13 @@ export class EditStylesComponent {
   styles: Style[] = [];
   showEditModal = false;
   showCreateModal = false;
+
   editedStyleIndex: number | null = null;
   editedStyleTitle: string = '';
+  editedStyleDescription: string = '';
+
   newStyleTitle: string = '';
+  newStyleDescription: string = '';
   newStyleImg: string | null = null;
 
   constructor(private router: Router, private stylesService: StylesService) {
@@ -33,6 +37,7 @@ export class EditStylesComponent {
   openEditModal(index: number) {
     this.editedStyleIndex = index;
     this.editedStyleTitle = this.styles[index].title;
+    this.editedStyleDescription = this.styles[index].description;
     this.showEditModal = true;
   }
 
@@ -40,11 +45,14 @@ export class EditStylesComponent {
     this.showEditModal = false;
     this.editedStyleIndex = null;
     this.editedStyleTitle = '';
+    this.editedStyleDescription = '';
   }
 
   saveEdit() {
     if (this.editedStyleIndex !== null) {
-      this.styles[this.editedStyleIndex].title = this.editedStyleTitle;
+      const updatedStyle = this.styles[this.editedStyleIndex];
+      updatedStyle.title = this.editedStyleTitle;
+      updatedStyle.description = this.editedStyleDescription;
       this.stylesService.setStyles(this.styles);
     }
     this.closeEditModal();
@@ -57,12 +65,17 @@ export class EditStylesComponent {
   closeCreateModal() {
     this.showCreateModal = false;
     this.newStyleTitle = '';
+    this.newStyleDescription = '';
     this.newStyleImg = null;
   }
 
   saveCreate() {
-    if (this.newStyleTitle && this.newStyleImg) {
-      this.stylesService.addStyle({ title: this.newStyleTitle, imgSrc: this.newStyleImg });
+    if (this.newStyleTitle && this.newStyleImg && this.newStyleDescription) {
+      this.stylesService.addStyle({
+        title: this.newStyleTitle, 
+        imgSrc: this.newStyleImg,
+        description: this.newStyleDescription,
+        });
       this.styles = this.stylesService.getStyles();
     }
     this.closeCreateModal();

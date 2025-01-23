@@ -1,7 +1,9 @@
-<div class="p-6">
+<div class="p-6 flex flex-col items-center">
   <h1 class="text-2xl font-bold mb-4">Créer votre scénario</h1>
 
-  <div class="mb-8">
+  
+
+  <div class="mb-8 justify-center">
     <h2 class="text-xl font-semibold mb-4">Nombre de personnages</h2>
     <div class="flex space-x-4">
       <button
@@ -15,17 +17,17 @@
     </div>
   </div>
 
-  <div class="mb-8">
-    <h2 class="text-xl font-semibold mb-4">3. Listes des personnages</h2>
+  <div class="w-3/4 mb-8">
+    <h2 class="text-xl font-semibold mb-4 text-center">Listes des personnages</h2>
     <div class="grid grid-cols-2 gap-8">
       <div
         *ngFor="let character of charactersArray; let i = index"
         class="border p-4 rounded shadow"
       >
-        <h3 class="font-semibold mb-2">Personnage {{ i + 1 }}</h3>
+        <h3 class="font-bold mb-2">Personnage {{ i + 1 }}</h3>
 
         <div class="mb-4">
-          <label for="name{{ i }}" class="block text-sm font-medium">Nom du personnage</label>
+          <label for="name{{ i }}" class="font-semibold block text-sm">Nom du personnage</label>
           <input
             id="name{{ i }}"
             [(ngModel)]="charactersArray[i].name"
@@ -36,20 +38,69 @@
         </div>
 
         <div class="mb-4">
-          <label for="trait{{ i }}" class="block text-sm font-medium">Traits de personnalité</label>
-          <select
-            id="trait{{ i }}"
-            [(ngModel)]="charactersArray[i].trait"
-            class="w-full border rounded px-3 py-1"
-          >
-            <option value="courageux">Courageux</option>
-            <option value="intelligent">Intelligent</option>
-            <option value="mystérieux">Mystérieux</option>
-          </select>
+          <label class="font-semibold block text-sm">Traits de personnalité</label>
+          <fieldset class="border p-3 rounded">
+            <div class="flex items-center gap-2">
+              <input
+                type="checkbox"
+                id="courageux{{ i }}"
+                name="trait"
+                value="courageux"
+                [checked]="charactersArray[i].trait.includes('courageux')"
+                (change)="onTraitChange(i, 'courageux', $event)"
+              />
+              <label for="courageux{{ i }}">Courageux</label>
+            </div>
+            <div class="flex items-center gap-2">
+              <input
+                type="checkbox"
+                id="intelligent{{ i }}"
+                name="trait"
+                value="intelligent"
+                [checked]="charactersArray[i].trait.includes('intelligent')"
+                (change)="onTraitChange(i, 'intelligent', $event)"
+              />
+              <label for="intelligent{{ i }}">Intelligent</label>
+            </div>
+            <div class="flex items-center gap-2">
+              <input
+                type="checkbox"
+                id="mysterieux{{ i }}"
+                name="trait"
+                value="mysterieux"
+                [checked]="charactersArray[i].trait.includes('mysterieux')"
+                (change)="onTraitChange(i, 'mysterieux', $event)"
+              />
+              <label for="mysterieux{{ i }}">Mystérieux</label>
+            </div>
+            <div class="flex items-center gap-2">
+              <input
+                type="checkbox"
+                id="loyal{{ i }}"
+                name="trait"
+                value="loyal"
+                [checked]="charactersArray[i].trait.includes('loyal')"
+                (change)="onTraitChange(i, 'loyal', $event)"
+              />
+              <label for="loyal{{ i }}">Loyal</label>
+            </div>
+            <div class="flex items-center gap-2">
+              <input
+                type="checkbox"
+                id="creatif{{ i }}"
+                name="trait"
+                value="creatif"
+                [checked]="charactersArray[i].trait.includes('creatif')"
+                (change)="onTraitChange(i, 'creatif', $event)"
+              />
+              <label for="creatif{{ i }}">Créatif</label>
+            </div>
+          </fieldset>
         </div>
+        
 
         <div>
-          <label for="appearance{{ i }}" class="block text-sm font-medium">Apparence physique</label>
+          <label for="appearance{{ i }}" class="block text-sm font-semibold">Apparence physique</label>
           <select
             id="appearance{{ i }}"
             [(ngModel)]="charactersArray[i].appearance"
@@ -65,7 +116,7 @@
   </div>
 
   <textarea
-    class="w-full h-40 border rounded px-3 py-2"
+    class="w-3/4 h-40 border rounded px-3 py-2"
     [(ngModel)]="userPlot"
     placeholder="Décrivez la trame de votre film ici..."
   ></textarea>

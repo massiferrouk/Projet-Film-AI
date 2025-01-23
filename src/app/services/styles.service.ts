@@ -6,9 +6,21 @@ import { Style } from '../models/style.model';
 })
 export class StylesService {
   private styles: Style[] = [
-    { title: 'Game of Thrones', imgSrc: 'game-of-thrones1.jpg' },
-    { title: 'Vikings', imgSrc: 'viking.jpg' },
-    { title: 'La Casa de Papel', imgSrc: 'la-casa-de-papel.jpg' },
+    { 
+      title: 'Game of Thrones', 
+      imgSrc: 'game-of-thrones1.jpg',
+      description: 'description1'
+    },
+    { 
+      title: 'Vikings',
+      imgSrc: 'viking.jpg',
+      description: 'description2'
+    },
+    { 
+      title: 'La Casa de Papel', 
+      imgSrc: 'la-casa-de-papel.jpg',
+      description: 'description3'
+    },
   ];
 
   getStyles(): Style[] {

@@ -1,6 +1,6 @@
-<div class="flex flex-col items-center p-6">
-  <h1 class="text-2xl font-bold mb-6 text-center">Choisissez un style de film</h1>
-  <div class="flex justify-center space-x-4">
+<div class="flex flex-col items-center p-6 mt-16">
+  <h1 class="text-3xl font-bold mb-14 text-center">Choisissez un style de film</h1>
+  <div class="flex justify-center space-x-8">
     <app-movie-card
       *ngFor="let style of styles; let i = index"
       [title]="style.title"
@@ -10,7 +10,7 @@
     ></app-movie-card>
   </div>
 
-  <div class="flex space-x-4 mt-8">
+  <div class="flex space-x-6 mt-14">
     <button
       class="px-6 py-3 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition"
       (click)="goToNextPage()"
@@ -19,7 +19,7 @@
       Suivant
     </button>
     <button
-      class="ml-4 px-6 py-3 bg-gray-500 text-white rounded-lg hover:bg-gray-600 transition"
+      class="ml-4 px-6 py-3 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition"
       (click)="navigateToEditStyles()"
     >
       Modifier les styles

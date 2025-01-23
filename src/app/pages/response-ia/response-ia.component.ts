@@ -17,8 +17,8 @@ export class ResponseIaComponent {
 
     if (state) {
       const newScenario = {
-        name: `Scénario pour ${state['characters']} personnages`,
-        scenario: `Voici le scénario pour ${state['characters']} personnages : ${state['plot']}`,
+        name: `Scénario ${this.discussions.length + 1}`,
+        scenario: state['plot'],
       };
 
       this.discussions.push(newScenario);
@@ -32,6 +32,6 @@ export class ResponseIaComponent {
   }
 
   generateNewScenario() {
-    this.router.navigate(['/scenariocreated/1']);
+    this.router.navigate(['/scenarios']);
   }
 }
