@@ -18,7 +18,7 @@
       <h2 class="text-xl font-bold mb-4">Scénario généré</h2>
       <div class="border p-4 rounded-md bg-white h-64 overflow-y-auto shadow-md">
         <p *ngIf="selectedDiscussionIndex !== null">
-          {{ discussions[selectedDiscussionIndex]?.scenario || 'Aucun scénario généré.' }}
+          {{ discussions[selectedDiscussionIndex].scenario || 'Aucun scénario généré.' }}
         </p>
         <p *ngIf="selectedDiscussionIndex === null" class="text-gray-500">
           Sélectionnez une discussion à gauche ou générez un nouveau scénario.

@@ -27,7 +27,7 @@ export class ScenariosComponent {
   goToNextPage() {
     if (this.selectedStyleIndex !== null) {
       const styleId = this.selectedStyleIndex;
-      this.router.navigate([`/scenariocreated/${styleId}`]);
+      this.router.navigate([`/scenariocreated2/${styleId}`]);
     }
   }
 
