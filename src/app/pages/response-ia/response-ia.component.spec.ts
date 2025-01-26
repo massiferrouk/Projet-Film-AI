@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-
+import { CommonModule } from '@angular/common';
 import { ResponseIaComponent } from './response-ia.component';
 
 describe('ResponseIaComponent', () => {

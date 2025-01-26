@@ -11,7 +11,12 @@ export class ScenarioService {
   constructor(private http: HttpClient) {}
 
   sendScenario(promptId: number, payload: any): Observable<any> {
-    const url = `${this.apiUrl}/${promptId}/scenariogenerate`; // Construire l'URL complète
-    return this.http.post(this.apiUrl, payload);
+    const url = `${this.apiUrl}/${promptId}/scenariogenerate`;
+    return this.http.post(url, payload);
   }
+  // Récupérer l'historique des scénarios (que le titre)
+  getScenarioList(): Observable<any> {
+    return this.http.get(`${this.apiUrl}/scenarioList`);
+  }
+
 }

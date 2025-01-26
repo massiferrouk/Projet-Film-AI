@@ -1,36 +1,62 @@
-import { Component } from '@angular/core';
-import { Router } from '@angular/router';
-import { CommonModule } from '@angular/common';
+import { Component, OnInit } from '@angular/core';
+import { MovieService } from '../../movie.service'; // Assurez-vous d'importer le bon service
+import { ActivatedRoute, Router } from '@angular/router';
+import { NgForOf, NgIf } from '@angular/common';
 
 @Component({
   selector: 'app-response-ia',
-  imports: [CommonModule],
   templateUrl: './response-ia.component.html',
   styleUrls: ['./response-ia.component.css'],
+  imports: [
+    NgForOf,
+    NgIf
+  ]
 })
-export class ResponseIaComponent {
-  discussions: { name: string; scenario: string }[] = [];
+export class ResponseIaComponent implements OnInit {
+  discussions: { titre: string; scenario: string }[] = [];
   selectedDiscussionIndex: number | null = null;
+  isLoading = false;
 
-  constructor(private router: Router) {
-    const state = this.router.getCurrentNavigation()?.extras.state;
 
-    if (state) {
-      const newScenario = {
-        name: `Scénario ${this.discussions.length + 1}`,
-        scenario: state['plot'],
-      };
+  constructor(
+    private movieService: MovieService,
+    private router: Router
+  ) {}
 
-      this.discussions.push(newScenario);
+  ngOnInit(): void {
 
-      this.selectedDiscussionIndex = this.discussions.length - 1;
+    const navigation = history.state;
+    if (!navigation) {
+      console.error("Données manquantes pour le scénario !");
+    } else {
+      this.discussions = [{
+        titre: navigation.titre,
+        scenario: navigation.scenario
+      }];
     }
+    this.loadScenarioList();
   }
 
-  selectDiscussion(index: number) {
+  loadScenarioList(): void {
+
+    this.movieService.getScenarioList().subscribe({
+      next: (data) => {
+        console.log(data);
+        this.discussions = data.map((item: any, index: number) => ({
+          name: `Discussion ${index + 1}`,
+          scenario: item.scenario,
+        }));
+      },
+      error: (err) => {
+        console.error('Erreur lors du chargement des scénarios :', err);
+      },
+    });
+  }
+
+
+  selectDiscussion(index: number): void {
     this.selectedDiscussionIndex = index;
   }
-
   generateNewScenario() {
     this.router.navigate(['/scenarios']);
   }

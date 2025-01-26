@@ -6,18 +6,23 @@ import { ScenarioCreatedComponent } from './pages/scenario-created/scenario-crea
 import { ScenarioCreated2Component } from './pages/scenario-created2/scenario-created2.component';
 import { EditStylesComponent } from './pages/edit-styles/edit-styles.component';
 import { ResponseIaComponent } from './pages/response-ia/response-ia.component';
+import {HttpClientModule, provideHttpClient} from '@angular/common/http';
+import { BrowserModule } from '@angular/platform-browser';
+
+
+
 
 export const routes: Routes = [
   { path: '', component: HomeComponent },
   { path: 'scenarios', component: ScenariosComponent },
   { path: 'scenariocreated/:id', component: ScenarioCreatedComponent },
-  { path: 'scenariocreated2/:id', component: ScenarioCreated2Component },
+  { path: 'scenariocreated2/:styleId', component: ScenarioCreated2Component },
   { path: 'edit-styles', component: EditStylesComponent },
   { path: 'reponseIA', component: ResponseIaComponent },
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes)],
+  imports: [RouterModule.forRoot(routes),BrowserModule],
   exports: [RouterModule],
 })
 export class AppRoutingModule {}

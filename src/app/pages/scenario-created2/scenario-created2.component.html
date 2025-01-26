@@ -1,9 +1,9 @@
 <div class="w-full h-screen flex items-center justify-center bg-gray-100">
   <div class="w-11/12 h-5/6 flex flex-col items-center border border-blue-500 rounded-lg shadow-lg bg-gray-50 p-4">
     <!-- Conteneur principal -->
-    <div class="w-full flex flex-grow h-full">
+    <div class="w-full flex flex-col lg:flex-row h-full">
       <!-- Colonne de gauche : Liste des personnages -->
-      <div class="w-1/3 border-r pr-4 flex flex-col">
+      <div class="w-full lg:w-1/3 border-b lg:border-r pr-4 flex flex-col mb-4 lg:mb-0">
         <h2 class="text-lg font-bold text-blue-600 mb-3 pl-2">Liste des personnages</h2>
         <ul class="space-y-2 overflow-auto h-4/5">
           <li
@@ -11,11 +11,11 @@
             class="flex items-center justify-between cursor-pointer p-2 border rounded-lg hover:bg-blue-50 transition"
             (click)="selectCharacter(i)"
           >
-            <span class="font-semibold text-blue-800 text-sm">
-              Personnage {{ i + 1 }}
+            <span class="text-xl text-gray-700">
+              {{ character.nomPersonnage || 'Sans nom' }}
             </span>
-            <span class="text-xs text-gray-600">
-              {{ character.name || 'Sans nom' }}
+            <span class="font-medium text-blue-700 text-sm">
+              Personnage {{ i + 1 }}
             </span>
           </li>
         </ul>
@@ -28,18 +28,31 @@
       </div>
 
       <!-- Colonne de droite : Formulaire -->
-      <div class="w-2/3 pl-4 flex flex-col">
+      <div class="w-full lg:w-2/3 pl-4 flex flex-col">
         <h2 class="text-lg font-bold text-blue-600 mb-3 pl-2">Formulaire du personnage</h2>
         <div class="space-y-3 flex-grow px-2">
+          <!-- Champ : Titre -->
+          <div>
+            <label class="font-semibold block text-blue-700 text-xs mb-1">
+              Titre
+            </label>
+            <input
+              [(ngModel)]="titre"
+              type="text"
+              class="w-full lg:w-10/12 border border-gray-300 rounded-lg px-2 py-1 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
+              placeholder="Titre de l'histoire"
+            />
+          </div>
+
           <!-- Champ : Nom du personnage -->
           <div>
             <label class="font-semibold block text-blue-700 text-xs mb-1">
               Nom du personnage
             </label>
             <input
-              [(ngModel)]="currentCharacter.name"
+              [(ngModel)]="currentCharacter.nomPersonnage"
               type="text"
-              class="w-10/12 border border-gray-300 rounded-lg px-2 py-1 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
+              class="w-full lg:w-10/12 border border-gray-300 rounded-lg px-2 py-1 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
               placeholder="Nom du personnage"
             />
           </div>
@@ -58,7 +71,7 @@
                   <input
                     type="checkbox"
                     id="{{ trait }}"
-                    [checked]="currentCharacter.trait.includes(trait)"
+                    [checked]="currentCharacter.traitsPersonnalite.includes(trait)"
                     (change)="onTraitChange(trait, $event)"
                     class="h-4 w-4 text-blue-600 focus:ring-2 focus:ring-blue-500 rounded"
                   />
@@ -79,8 +92,8 @@
               Apparence physique
             </label>
             <select
-              [(ngModel)]="currentCharacter.appearance"
-              class="w-10/12 border border-gray-300 rounded-lg px-2 py-1 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
+              [(ngModel)]="currentCharacter.description"
+              class="w-full lg:w-10/12 border border-gray-300 rounded-lg px-2 py-1 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
             >
               <option value="grand">Grand</option>
               <option value="mince">Mince</option>
@@ -90,7 +103,7 @@
 
           <!-- Bouton : Valider -->
           <button
-            class="w-8/12 px-2 py-2 bg-blue-600 text-white font-semibold text-sm rounded-lg hover:bg-blue-700 transition"
+            class="w-full lg:w-8/12 px-2 py-2 bg-blue-600 text-white font-semibold text-sm rounded-lg hover:bg-blue-700 transition"
             (click)="validateCharacter()"
           >
             Valider
@@ -100,12 +113,14 @@
     </div>
 
     <!-- Zone de saisie de la trame et bouton générer -->
-    <div class="w-full mt-6 flex flex-col items-center">
+    <div class="w-10/12 lg:w-8/12 mt-6 flex flex-col items-end">
       <textarea
-        class="w-10/12 h-20 border rounded px-3 py-1 text-sm resize-none focus:ring-2 focus:ring-blue-500 focus:outline-none"
+        class="w-100 lg:w-10/12 h-20 border rounded px-3 py-1 text-sm resize-none focus:ring-2 focus:ring-blue-500 focus:outline-none"
         [(ngModel)]="userPlot"
         placeholder="Décrivez la trame de votre film ici..."
       ></textarea>
+      <app-loading-modal [isLoading]="isLoading"></app-loading-modal>
+
       <button
         class="mt-4 px-4 py-2 bg-blue-500 text-white font-semibold text-sm rounded-lg hover:bg-blue-600 transition"
         (click)="generateScenario()"

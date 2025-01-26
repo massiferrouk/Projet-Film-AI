@@ -4,11 +4,12 @@ import { CommonModule } from '@angular/common';
 import { MovieCardComponent } from '../../components/movie-card/movie-card.component';
 import { StylesService } from '../../services/styles.service';
 import { Style } from '../../models/style.model';
+import {LoadingModalComponent} from '../../loading-modal/loading-modal.component';
 
 @Component({
   selector: 'app-scenarios',
   standalone: true,
-  imports: [CommonModule, MovieCardComponent],
+  imports: [CommonModule, MovieCardComponent, LoadingModalComponent],
   templateUrl: './scenarios.component.html',
   styleUrls: ['./scenarios.component.css'],
 })

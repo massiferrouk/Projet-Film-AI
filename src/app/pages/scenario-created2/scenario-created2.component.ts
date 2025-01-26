@@ -1,35 +1,47 @@
 import { Component } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router ,ActivatedRoute} from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { MovieService } from '../../movie.service';
+import {LoadingModalComponent} from '../../loading-modal/loading-modal.component'; // Assurez-vous d'importer le bon service
+
 
 interface Character {
-  name: string;
-  trait: string[];
-  appearance: string;
+  nomPersonnage: string;
+  traitsPersonnalite: string[];
+  description: string;
 }
 
 @Component({
   selector: 'app-scenario-created',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, LoadingModalComponent],
   templateUrl: './scenario-created2.component.html',
   styleUrls: ['./scenario-created2.component.css'],
 })
-
-
 export class ScenarioCreated2Component {
+  isLoading = false;
+
   selectedCharacters = 1;
   userPlot: string = '';
-  charactersArray: { name: string; trait: string[]; appearance: string }[] = [];
+  titre: string = ''; // Champ titre
+  charactersArray: { nomPersonnage: string; traitsPersonnalite: any[]; description: string }[] = []; // Liste vide au démarrage
   personalityTraits = ['courageux', 'intelligent', 'mysterieux', 'loyal', 'creatif'];
+  currentCharacter: Character = {nomPersonnage: '', traitsPersonnalite: [], description: 'grand'};
+  selectedCharacterIndex: number | null = null;
+  styleId: number | null = null;
 
-  currentCharacter: Character = { name: '', trait: [], appearance: 'grand' }; // Trait typé comme string[]
-  selectedCharacterIndex: number | null = null; // Indice du personnage actuellement sélectionné
-  
+  constructor(private router: Router,
+              private activatedRoute: ActivatedRoute,
+              private movieService: MovieService,
+  ) {
 
-  constructor(private router: Router) {
-    this.updateCharactersArray();
+  }
+  ngOnInit() {
+    this.activatedRoute.params.subscribe(params => {
+      this.styleId = +params['styleId'];
+      console.log('Style ID:', this.styleId);
+    });
   }
 
   selectCharacters(num: number) {
@@ -38,71 +50,77 @@ export class ScenarioCreated2Component {
   }
 
   updateCharactersArray() {
-    this.charactersArray = Array.from({ length: this.selectedCharacters }, () => ({
-      name: '',
-      trait: [],
-      appearance: 'grand',
+    this.charactersArray = Array.from({length: this.selectedCharacters}, () => ({
+      nomPersonnage: '',
+      traitsPersonnalite: [],
+      description: 'grand',
     }));
-  }
-
-  generateScenario() {
-    // Envoyer les données à la prochaine page
-    this.router.navigate(['/reponseIA'], {
-      state: {
-        plot: this.userPlot,
-        characters: this.charactersArray,
-      },
-    });
   }
 
   onTraitChange(trait: string, event: Event) {
     const isChecked = (event.target as HTMLInputElement).checked;
-  
     if (isChecked) {
-      if (!this.currentCharacter.trait.includes(trait)) {
-        this.currentCharacter.trait.push(trait); // Ajout de la chaîne au tableau
+      if (!this.currentCharacter.traitsPersonnalite.includes(trait)) {
+        this.currentCharacter.traitsPersonnalite.push(trait);
       }
     } else {
-      this.currentCharacter.trait = this.currentCharacter.trait.filter(t => t !== trait); // Suppression
+      this.currentCharacter.traitsPersonnalite = this.currentCharacter.traitsPersonnalite.filter(t => t !== trait);
     }
-  }  
-  
+  }
 
   addNewCharacter() {
-    // Si un personnage était sélectionné, on le sauvegarde
     if (this.selectedCharacterIndex !== null) {
-      this.charactersArray[this.selectedCharacterIndex] = { ...this.currentCharacter };
+      this.charactersArray[this.selectedCharacterIndex] = {...this.currentCharacter};
     }
-  
-    // Réinitialiser le formulaire
-    this.currentCharacter = { name: '', trait: [], appearance: 'grand' };
-    this.selectedCharacterIndex = null; // Pas de sélection
+    this.currentCharacter = {nomPersonnage: '', traitsPersonnalite: [], description: 'grand'};
+    this.selectedCharacterIndex = null;
   }
 
   selectCharacter(index: number) {
-    // Sauvegarder les données actuelles si un autre personnage était en cours d'édition
     if (this.selectedCharacterIndex !== null) {
-      this.charactersArray[this.selectedCharacterIndex] = { ...this.currentCharacter };
+      this.charactersArray[this.selectedCharacterIndex] = {...this.currentCharacter};
     }
-  
-    // Charger le personnage sélectionné
-    this.currentCharacter = { ...this.charactersArray[index] };
+    this.currentCharacter = {...this.charactersArray[index]};
     this.selectedCharacterIndex = index;
   }
 
   validateCharacter() {
     if (this.selectedCharacterIndex !== null) {
-      // Si un personnage est en cours d'édition, sauvegarder les données
-      this.charactersArray[this.selectedCharacterIndex] = { ...this.currentCharacter };
+      // Mise à jour du tableau avec le personnage actuel
+      this.charactersArray[this.selectedCharacterIndex] = {...this.currentCharacter};
     } else {
-      // Sinon, ajouter un nouveau personnage à la liste
-      this.charactersArray.push({ ...this.currentCharacter });
+      this.charactersArray.push({...this.currentCharacter});
     }
-  
-    // Réinitialiser le formulaire et désélectionner tout personnage
-    this.currentCharacter = { name: '', trait: [], appearance: 'grand' };
+
     this.selectedCharacterIndex = null;
+    this.currentCharacter = {nomPersonnage: '', traitsPersonnalite: [], description: 'grand'};
   }
-  
-  
+
+  generateScenario() {
+    if (!this.titre || !this.userPlot || this.charactersArray.length === 0) {
+      console.error("Erreur : Le titre, la trame ou les personnages sont manquants !");
+      return;
+    }
+    this.isLoading = true;
+    this.movieService.generateScenario(this.styleId, this.titre, this.charactersArray, this.userPlot).subscribe({
+      next: (response) => {
+        const newScenario = {
+          titre: this.titre,
+          scenario: response || 'Aucun scénario généré',
+          styleId: this.styleId,
+        };
+
+        this.router.navigate(['/reponseIA'], {
+          state: {
+            scenario: newScenario.scenario
+          },
+        })
+        this.isLoading = false;
+      },
+      error: (err) => {
+        console.error('Erreur lors du traitement du scénario :', err);
+        this.isLoading = false;
+      },
+    });
+  }
 }

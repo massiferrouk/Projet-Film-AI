@@ -8,7 +8,7 @@
         class="p-2 cursor-pointer rounded-md hover:bg-gray-200"
         [class.bg-blue-200]="i === selectedDiscussionIndex"
       >
-        {{ discussion.name }}
+        {{ discussion.titre }}
       </li>
     </ul>
   </div>
@@ -17,11 +17,12 @@
     <div class="mt-8 p-6 bg-gray-50 rounded-lg shadow-inner">
       <h2 class="text-xl font-bold mb-4">Scénario généré</h2>
       <div class="border p-4 rounded-md bg-white h-64 overflow-y-auto shadow-md">
-        <p *ngIf="selectedDiscussionIndex !== null">
-          {{ discussions[selectedDiscussionIndex].scenario || 'Aucun scénario généré.' }}
+        <div *ngIf="isLoading" class="text-blue-500">Chargement...</div>
+        <p *ngIf="!isLoading && discussions.length > 0">
+          {{ discussions[0].scenario || 'Aucun scénario généré.' }}
         </p>
-        <p *ngIf="selectedDiscussionIndex === null" class="text-gray-500">
-          Sélectionnez une discussion à gauche ou générez un nouveau scénario.
+        <p *ngIf="!isLoading && discussions.length === 0" class="text-gray-500">
+          Aucune discussion disponible.
         </p>
       </div>
 
