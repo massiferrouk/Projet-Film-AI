@@ -1,69 +1,82 @@
-<div class="w-full h-screen flex items-center justify-center bg-gray-100">
-  <div class="w-11/12 h-5/6 flex flex-col items-center border border-blue-500 rounded-lg shadow-lg bg-gray-50 p-4">
-    <!-- Conteneur principal -->
+<div class="w-full h-screen flex items-center justify-center bg-gradient-to-br from-gray-100 via-gray-200 to-gray-300">
+  <div class="w-11/12 h-5/6 flex flex-col items-center border border-blue-500 rounded-2xl shadow-xl bg-white p-6">
+    <header class="w-full text-center mb-6">
+      <h1 class="text-3xl font-extrabold text-blue-600">Créateur de Scénario</h1>
+      <p class="text-gray-600 mt-2">Créez vos personnages et développez un scénario captivant.</p>
+    </header>
+
     <div class="w-full flex flex-col lg:flex-row h-full">
-      <!-- Colonne de gauche : Liste des personnages -->
-      <div class="w-full lg:w-1/3 border-b lg:border-r pr-4 flex flex-col mb-4 lg:mb-0">
-        <h2 class="text-lg font-bold text-blue-600 mb-3 pl-2">Liste des personnages</h2>
-        <ul class="space-y-2 overflow-auto h-4/5">
+      <aside class="w-full lg:w-1/3 border-b lg:border-r px-4 py-4 flex flex-col space-y-4">
+        <h2 class="text-xl font-bold text-blue-600">Liste des Personnages</h2>
+        <ul
+          class="space-y-3 overflow-auto max-h-72 scrollbar-thin scrollbar-thumb-blue-500 scrollbar-track-gray-200"
+          id="character-list"
+        >
           <li
             *ngFor="let character of charactersArray; let i = index"
-            class="flex items-center justify-between cursor-pointer p-2 border rounded-lg hover:bg-blue-50 transition"
+            class="flex items-center justify-between cursor-pointer p-3 bg-white border rounded-lg shadow-sm hover:shadow-md hover:bg-blue-50 transition"
+            [class.bg-blue-100]="selectedCharacterIndex === i"
             (click)="selectCharacter(i)"
           >
-            <span class="text-xl text-gray-700">
+            <span class="text-lg text-gray-700 font-medium">
               {{ character.nomPersonnage || 'Sans nom' }}
             </span>
-            <span class="font-medium text-blue-700 text-sm">
+            <span class="text-sm text-blue-500 font-semibold">
               Personnage {{ i + 1 }}
             </span>
           </li>
         </ul>
         <button
-          class="mt-4 w-11/12 mx-auto px-3 py-2 bg-blue-600 text-white font-semibold text-sm rounded-lg hover:bg-blue-700 transition"
+          class="w-full px-4 py-2 bg-gradient-to-r from-blue-500 to-blue-700 text-white font-semibold rounded-lg shadow-lg hover:opacity-90 transition"
           (click)="addNewCharacter()"
         >
-          + Ajouter un personnage
+          + Ajouter un Personnage
         </button>
-      </div>
+      </aside>
 
-      <!-- Colonne de droite : Formulaire -->
-      <div class="w-full lg:w-2/3 pl-4 flex flex-col">
-        <h2 class="text-lg font-bold text-blue-600 mb-3 pl-2">Formulaire du personnage</h2>
-        <div class="space-y-3 flex-grow px-2">
-          <!-- Champ : Titre -->
-          <div>
-            <label class="font-semibold block text-blue-700 text-xs mb-1">
-              Titre
-            </label>
+      <main class="w-full lg:w-2/3 px-6 py-4 space-y-6">
+        <h2 class="text-xl font-bold text-blue-600">Formulaire du Personnage</h2>
+        <div class="grid grid-cols-2 gap-4">
+          <div class="col-span-2">
+            <label class="font-semibold text-gray-700 text-sm mb-1 block">Titre de l'histoire</label>
             <input
               [(ngModel)]="titre"
               type="text"
-              class="w-full lg:w-10/12 border border-gray-300 rounded-lg px-2 py-1 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
-              placeholder="Titre de l'histoire"
+              class="w-full border border-gray-300 rounded-lg px-4 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
+              placeholder="Entrez un titre"
             />
           </div>
 
-          <!-- Champ : Nom du personnage -->
           <div>
-            <label class="font-semibold block text-blue-700 text-xs mb-1">
-              Nom du personnage
-            </label>
+            <label class="font-semibold text-gray-700 text-sm mb-1 block">Nom du Personnage</label>
             <input
               [(ngModel)]="currentCharacter.nomPersonnage"
+              (ngModelChange)="validateForm()"
               type="text"
-              class="w-full lg:w-10/12 border border-gray-300 rounded-lg px-2 py-1 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
-              placeholder="Nom du personnage"
+              class="w-full border border-gray-300 rounded-lg px-4 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
+              placeholder="Nom"
             />
+            <p *ngIf="errors.nomPersonnage" class="text-red-500 text-xs mt-1">
+              Le nom est obligatoire.
+            </p>
           </div>
 
-          <!-- Champ : Traits de personnalité -->
           <div>
-            <label class="font-semibold block text-blue-700 text-xs mb-1">
-              Traits de personnalité
-            </label>
-            <fieldset class="border border-gray-300 rounded-lg p-2 bg-white">
-              <div class="grid grid-cols-2 gap-2">
+            <label class="font-semibold text-gray-700 text-sm mb-1 block">Apparence Physique</label>
+            <select
+              [(ngModel)]="currentCharacter.description"
+              class="w-full border border-gray-300 rounded-lg px-4 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
+            >
+              <option value="grand">Grand</option>
+              <option value="mince">Mince</option>
+              <option value="fort">Fort</option>
+            </select>
+          </div>
+
+          <div class="col-span-2">
+            <label class="font-semibold text-gray-700 text-sm mb-1 block">Traits de Personnalité</label>
+            <fieldset class="border border-gray-300 rounded-lg p-4 bg-gray-50">
+              <div class="grid grid-cols-3 gap-2">
                 <div
                   *ngFor="let trait of personalityTraits"
                   class="flex items-center space-x-2"
@@ -72,61 +85,46 @@
                     type="checkbox"
                     id="{{ trait }}"
                     [checked]="currentCharacter.traitsPersonnalite.includes(trait)"
-                    (change)="onTraitChange(trait, $event)"
+                    (change)="onTraitChange(trait, $event); validateForm()"
                     class="h-4 w-4 text-blue-600 focus:ring-2 focus:ring-blue-500 rounded"
                   />
-                  <label
-                    for="{{ trait }}"
-                    class="text-gray-700 text-xs font-medium cursor-pointer"
-                  >
+                  <label for="{{ trait }}" class="text-gray-700 text-sm font-medium cursor-pointer">
                     {{ trait }}
                   </label>
                 </div>
               </div>
             </fieldset>
+            <p *ngIf="errors.traitsPersonnalite" class="text-red-500 text-xs mt-1">
+              Sélectionnez au moins un trait.
+            </p>
           </div>
 
-          <!-- Champ : Apparence physique -->
-          <div>
-            <label class="font-semibold block text-blue-700 text-xs mb-1">
-              Apparence physique
-            </label>
-            <select
-              [(ngModel)]="currentCharacter.description"
-              class="w-full lg:w-10/12 border border-gray-300 rounded-lg px-2 py-1 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
+          <div class="col-span-2 text-center">
+            <button
+              class="w-full lg:w-1/2 px-4 py-2 bg-blue-600 text-white font-semibold text-sm rounded-lg hover:bg-blue-700 transition"
+              (click)="validateCharacter()"
             >
-              <option value="grand">Grand</option>
-              <option value="mince">Mince</option>
-              <option value="fort">Fort</option>
-            </select>
+              Valider
+            </button>
           </div>
-
-          <!-- Bouton : Valider -->
-          <button
-            class="w-full lg:w-8/12 px-2 py-2 bg-blue-600 text-white font-semibold text-sm rounded-lg hover:bg-blue-700 transition"
-            (click)="validateCharacter()"
-          >
-            Valider
-          </button>
         </div>
-      </div>
+      </main>
+      
     </div>
 
-    <!-- Zone de saisie de la trame et bouton générer -->
-    <div class="w-10/12 lg:w-8/12 mt-6 flex flex-col items-end">
+    <footer class="w-full mt-6 flex flex-col items-center space-y-4">
       <textarea
-        class="w-100 lg:w-10/12 h-20 border rounded px-3 py-1 text-sm resize-none focus:ring-2 focus:ring-blue-500 focus:outline-none"
+        class="w-full lg:w-3/4 h-36 border border-gray-300 rounded-lg px-4 py-2 text-sm resize-none focus:ring-2 focus:ring-blue-500 focus:outline-none"
         [(ngModel)]="userPlot"
-        placeholder="Décrivez la trame de votre film ici..."
+        placeholder="Décrivez la trame de votre histoire ici..."
       ></textarea>
-      <app-loading-modal [isLoading]="isLoading"></app-loading-modal>
-
       <button
-        class="mt-4 px-4 py-2 bg-blue-500 text-white font-semibold text-sm rounded-lg hover:bg-blue-600 transition"
+        class="px-8 py-2 bg-gradient-to-r from-blue-500 to-blue-700 text-white font-semibold rounded-lg shadow-md hover:opacity-90 transition"
         (click)="generateScenario()"
       >
-        Générer le scénario
+        Générer le Scénario
       </button>
-    </div>
+    </footer>
+
   </div>
 </div>

@@ -3,7 +3,7 @@ import { Router ,ActivatedRoute} from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { MovieService } from '../../movie.service';
-import {LoadingModalComponent} from '../../loading-modal/loading-modal.component'; // Assurez-vous d'importer le bon service
+import {LoadingModalComponent} from '../../loading-modal/loading-modal.component';
 
 
 interface Character {
@@ -24,12 +24,17 @@ export class ScenarioCreated2Component {
 
   selectedCharacters = 1;
   userPlot: string = '';
-  titre: string = ''; // Champ titre
-  charactersArray: { nomPersonnage: string; traitsPersonnalite: any[]; description: string }[] = []; // Liste vide au démarrage
+  titre: string = '';
+  charactersArray: Character[] = [];
   personalityTraits = ['courageux', 'intelligent', 'mysterieux', 'loyal', 'creatif'];
   currentCharacter: Character = {nomPersonnage: '', traitsPersonnalite: [], description: 'grand'};
   selectedCharacterIndex: number | null = null;
   styleId: number | null = null;
+
+  errors = {
+    nomPersonnage: false,
+    traitsPersonnalite: false,
+  };
 
   constructor(private router: Router,
               private activatedRoute: ActivatedRoute,
@@ -42,6 +47,11 @@ export class ScenarioCreated2Component {
       this.styleId = +params['styleId'];
       console.log('Style ID:', this.styleId);
     });
+  }
+
+  validateForm() {
+    this.errors.nomPersonnage = !this.currentCharacter.nomPersonnage.trim();
+    this.errors.traitsPersonnalite = this.currentCharacter.traitsPersonnalite.length === 0;
   }
 
   selectCharacters(num: number) {
@@ -74,6 +84,13 @@ export class ScenarioCreated2Component {
     }
     this.currentCharacter = {nomPersonnage: '', traitsPersonnalite: [], description: 'grand'};
     this.selectedCharacterIndex = null;
+
+    setTimeout(() => {
+      const listElement = document.getElementById('character-list');
+      if (listElement) {
+        listElement.scrollTop = listElement.scrollHeight;
+      }
+    }, 0);
   }
 
   selectCharacter(index: number) {
@@ -85,8 +102,14 @@ export class ScenarioCreated2Component {
   }
 
   validateCharacter() {
+    this.validateForm();
+
+    if (this.errors.nomPersonnage || this.errors.traitsPersonnalite) {
+      console.error("Validation échouée : Corrigez les erreurs dans le formulaire.");
+      return;
+    }
+
     if (this.selectedCharacterIndex !== null) {
-      // Mise à jour du tableau avec le personnage actuel
       this.charactersArray[this.selectedCharacterIndex] = {...this.currentCharacter};
     } else {
       this.charactersArray.push({...this.currentCharacter});

@@ -6,8 +6,7 @@ import { Observable } from 'rxjs';
   providedIn: 'root',
 })
 export class ScenarioService {
-  private apiUrl = 'http://localhost:8080/api/v1/chat'; // Remplacez par l'URL de votre API
-
+  private apiUrl = 'http://localhost:8080/api/v1/chat';
   constructor(private http: HttpClient) {}
 
   sendScenario(promptId: number, payload: any): Observable<any> {

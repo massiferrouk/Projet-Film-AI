@@ -14,8 +14,10 @@ import { Style } from '../../models/style.model';
 })
 export class EditStylesComponent {
   styles: Style[] = [];
+  
   showEditModal = false;
   showCreateModal = false;
+  showDeleteModal = false;
 
   editedStyleIndex: number | null = null;
   editedStyleTitle: string = '';
@@ -25,13 +27,31 @@ export class EditStylesComponent {
   newStyleDescription: string = '';
   newStyleImg: string | null = null;
 
+  styleToDeleteIndex: number | null = null;
+
   constructor(private router: Router, private stylesService: StylesService) {
     this.styles = this.stylesService.getStyles();
   }
 
   deleteStyle(index: number) {
-    this.stylesService.deleteStyle(index);
-    this.styles = this.stylesService.getStyles();
+    // Ouvrir la modale de confirmation
+    this.styleToDeleteIndex = index;
+    this.showDeleteModal = true;
+  }
+
+  confirmDelete() {
+    // Supprimer le style si l'index est défini
+    if (this.styleToDeleteIndex !== null) {
+      this.stylesService.deleteStyle(this.styleToDeleteIndex);
+      this.styles = this.stylesService.getStyles();
+    }
+    this.cancelDelete(); // Fermer la modale
+  }
+
+  cancelDelete() {
+    // Réinitialiser les variables et fermer la modale
+    this.styleToDeleteIndex = null;
+    this.showDeleteModal = false;
   }
 
   openEditModal(index: number) {

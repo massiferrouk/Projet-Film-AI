@@ -19,3 +19,8 @@ app-movie-card.selected {
     transform: scale(1.1);
   }
   
+  .selected {
+    border: 2px solid #2563eb; /* Bleu fort pour indiquer la sélection */
+    background-color: #eff6ff; /* Bleu clair pour le fond */
+  }
+  

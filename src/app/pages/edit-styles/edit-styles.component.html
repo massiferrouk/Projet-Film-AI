@@ -1,129 +1,163 @@
-<div class="flex flex-col items-center p-6">
-  <h1 class="text-2xl font-bold">Modifier les styles</h1>
-  <div class="flex justify-between items-center w-full max-w-4xl mt-6">
-    <button
-      class="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition flex items-center justify-center"
-      (click)="goBack()"
-    >
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        class="h-5 w-5"
-        fill="none"
-        viewBox="0 0 24 24"
-        stroke="currentColor"
-        stroke-width="2"
+<div class="w-full h-screen flex flex-col items-center justify-center bg-gradient-to-br from-gray-100 via-gray-200 to-gray-300">
+  <div class="w-11/12 max-w-5xl flex flex-col items-center border border-blue-500 rounded-2xl shadow-xl bg-white p-8">
+    <header class="w-full text-center mb-6">
+      <h1 class="text-3xl font-extrabold text-blue-600">Modifier les Styles</h1>
+      <p class="text-gray-600 mt-2">Ajoutez, éditez ou supprimez vos styles préférés.</p>
+    </header>
+
+    <div class="w-full flex justify-between items-center mb-6 px-4">
+      <button
+        class="px-4 py-2 bg-gradient-to-r from-blue-500 to-blue-700 text-white rounded-lg shadow-md hover:opacity-90 transition flex items-center justify-center"
+        (click)="goBack()"
       >
-        <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
-      </svg>
-    </button>
-    <button
-      class="flex items-center space-x-2 text-blue-600 hover:text-blue-700 transition-shadow hover:shadow-lg p-2 rounded-md"
-      (click)="openCreateModal()"
-    >
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        class="h-4 w-4"
-        fill="none"
-        viewBox="0 0 24 24"
-        stroke="currentColor"
-        stroke-width="2"
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          class="h-5 w-5"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+          stroke-width="2"
+        >
+          <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
+        </svg>
+        <span class="ml-2">Retour</span>
+      </button>
+
+      <button
+        class="px-6 py-3 bg-gradient-to-r from-blue-500 to-blue-700 text-white font-semibold rounded-lg shadow-md hover:opacity-90 transition flex items-center"
+        (click)="openCreateModal()"
       >
-        <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
-      </svg>
-      <span class="font-semibold text-[20px]">style</span>
-    </button>
-  </div>
-
-
-  <div class="grid grid-cols-1 sm:grid-cols-3 gap-8 min-h-[50vh] place-items-center mt-4">
-    <div *ngFor="let style of styles; let i = index" class="flex flex-col items-center w-72">
-      <img 
-        [src]="style.imgSrc" 
-        alt="Style Image" 
-        class="w-full h-48 rounded shadow object-cover" 
-      />
-      <p class="font-semibold text-center mt-2 text-xl">{{ style.title }}</p>
-
-      <div class="flex flex-row mt-2 space-x-10">
-        <button
-          class="px-3 py-[4px] bg-blue-600 text-white rounded hover:bg-blue-700 transition text-sm"
-          (click)="openEditModal(i)"
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          class="h-5 w-5"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+          stroke-width="2"
         >
-          modifier
-        </button>
+          <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
+        </svg>
+        <span class="ml-2">Ajouter Style</span>
+      </button>
+    </div>
 
-        <button
-          class="px-3 py-[1px] bg-red-600 text-white rounded hover:bg-red-700 transition text-sm"
-          (click)="deleteStyle(i)"
-        >
-          Supprimer
-        </button>
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 w-full px-4 lg:px-12">
+      <div
+        *ngFor="let style of styles; let i = index"
+        class="flex flex-col items-center p-4 border rounded-lg shadow-md hover:shadow-lg transition hover:bg-blue-50"
+      >
+        <img
+          [src]="style.imgSrc"
+          alt="Style Image"
+          class="w-full h-48 rounded-lg object-cover shadow mb-4"
+        />
+        <p class="text-lg font-semibold text-center mb-2">{{ style.title }}</p>
+        <div class="flex space-x-4">
+          <button
+            class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"
+            (click)="openEditModal(i)"
+          >
+            Modifier
+          </button>
+          <button
+            class="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition"
+            (click)="deleteStyle(i)"
+          >
+            Supprimer
+          </button>
+        </div>
       </div>
     </div>
   </div>
 
   <div *ngIf="showEditModal" class="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
-    <div class="bg-white p-6 rounded shadow-md">
-      <h2 class="text-lg font-bold mb-4">Modifier le style</h2>
+    <div class="bg-white p-6 rounded-lg shadow-xl w-11/12 max-w-lg">
+      <h2 class="text-xl font-bold mb-4">Modifier le Style</h2>
       <input
         type="text"
-        class="border rounded px-3 py-2 w-full mb-4"
+        class="border rounded px-4 py-2 w-full mb-4"
         [(ngModel)]="editedStyleTitle"
         placeholder="Nouveau nom du style"
       />
       <textarea
-        class="border rounded px-3 py-2 w-full mb-4"
+        class="border rounded px-4 py-2 w-full mb-4"
         [(ngModel)]="editedStyleDescription"
         placeholder="Description du style"
         rows="4"
       ></textarea>
-      <button
-        class="px-4 py-2 bg-blue-500 text-white rounded mr-2"
-        (click)="saveEdit()"
-      >
-        Enregistrer
-      </button>
-      <button
-        class="px-4 py-2 bg-gray-500 text-white rounded"
-        (click)="closeEditModal()"
-      >
-        Annuler
-      </button>
+      <div class="flex justify-end space-x-4">
+        <button
+          class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"
+          (click)="saveEdit()"
+        >
+          Enregistrer
+        </button>
+        <button
+          class="px-4 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600 transition"
+          (click)="closeEditModal()"
+        >
+          Annuler
+        </button>
+      </div>
     </div>
   </div>
 
   <div *ngIf="showCreateModal" class="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
-    <div class="bg-white p-6 rounded shadow-md">
-      <h2 class="text-lg font-bold mb-4">Créer un nouveau style</h2>
+    <div class="bg-white p-6 rounded-lg shadow-xl w-11/12 max-w-lg">
+      <h2 class="text-xl font-bold mb-4">Créer un Nouveau Style</h2>
       <input
         type="text"
-        class="border rounded px-3 py-2 w-full mb-4"
+        class="border rounded px-4 py-2 w-full mb-4"
         [(ngModel)]="newStyleTitle"
         placeholder="Nom du style"
       />
       <textarea
-        class="border rounded px-3 py-2 w-full mb-4"
+        class="border rounded px-4 py-2 w-full mb-4"
         [(ngModel)]="newStyleDescription"
         placeholder="Description du style"
         rows="4"
       ></textarea>
       <input
         type="file"
-        class="border rounded px-3 py-2 w-full mb-4"
+        class="border rounded px-4 py-2 w-full mb-4"
         (change)="onFileSelected($event)"
       />
+      <div class="flex justify-end space-x-4">
+        <button
+          class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"
+          (click)="saveCreate()"
+        >
+          Ajouter
+        </button>
+        <button
+          class="px-4 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600 transition"
+          (click)="closeCreateModal()"
+        >
+          Annuler
+        </button>
+      </div>
+    </div>
+  </div>
+<div *ngIf="showDeleteModal" class="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
+  <div class="bg-white p-6 rounded-lg shadow-xl w-11/12 max-w-md">
+    <h2 class="text-xl font-bold mb-4 text-center">Confirmer la suppression</h2>
+    <p class="text-gray-600 mb-6 text-center">
+      Voulez-vous vraiment supprimer ce style ?
+    </p>
+    <div class="flex justify-between">
       <button
-        class="px-4 py-2 bg-blue-500 text-white rounded mr-2"
-        (click)="saveCreate()"
+        class="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition"
+        (click)="confirmDelete()"
       >
-        Ajouter
+        Oui, Supprimer
       </button>
       <button
-        class="px-4 py-2 bg-gray-500 text-white rounded"
-        (click)="closeCreateModal()"
+        class="px-4 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600 transition"
+        (click)="cancelDelete()"
       >
         Annuler
       </button>
     </div>
   </div>
+</div>
 </div>
