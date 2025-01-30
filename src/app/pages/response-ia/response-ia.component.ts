@@ -41,9 +41,9 @@ export class ResponseIaComponent implements OnInit {
 
     this.movieService.getScenarioList().subscribe({
       next: (data) => {
-        console.log(data);
-        this.discussions = data.map((item: any, index: number) => ({
-          name: `Discussion ${index + 1}`,
+        const limitedData = data.slice(0, 3); // Récupère les trois premiers scénarios
+        this.discussions = limitedData.map((item: any, index: number) => ({
+          titre: `Discussion ${index + 1}`, // Titre dynamique
           scenario: item.scenario,
         }));
       },

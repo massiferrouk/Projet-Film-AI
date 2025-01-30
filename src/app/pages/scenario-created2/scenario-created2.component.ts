@@ -31,6 +31,11 @@ export class ScenarioCreated2Component {
   selectedCharacterIndex: number | null = null;
   styleId: number | null = null;
 
+  showModal: boolean = false;
+  showAlertModal: boolean = false;
+
+
+
   errors = {
     nomPersonnage: false,
     traitsPersonnalite: false,
@@ -119,6 +124,45 @@ export class ScenarioCreated2Component {
     this.currentCharacter = {nomPersonnage: '', traitsPersonnalite: [], description: 'grand'};
   }
 
+  goToNextStep() {
+    if (this.charactersArray.length === 0) {
+      this.showAlert();
+      return;
+    }
+    this.showModal = true;
+  }
+
+  closeModal() {
+    this.showModal = false;
+  }
+  
+  confirmScenario() {
+    if (!this.userPlot.trim()) {
+      console.error("Veuillez saisir une trame pour continuer.");
+      return;
+    }
+  
+    this.showModal = false;
+    this.generateScenario();
+  }
+  
+  
+
+  deleteCharacter(index: number) {
+    this.charactersArray.splice(index, 1);
+    if (this.selectedCharacterIndex === index) {
+      this.selectedCharacterIndex = null;
+      this.currentCharacter = { nomPersonnage: '', traitsPersonnalite: [], description: 'grand' };
+    } else if (this.selectedCharacterIndex !== null && this.selectedCharacterIndex > index) {
+      this.selectedCharacterIndex--;
+    }
+  }
+  
+  editCharacter(index: number) {
+    this.selectCharacter(index);
+  }
+  
+
   generateScenario() {
     if (!this.titre || !this.userPlot || this.charactersArray.length === 0) {
       console.error("Erreur : Le titre, la trame ou les personnages sont manquants !");
@@ -146,4 +190,18 @@ export class ScenarioCreated2Component {
       },
     });
   }
+  goBack() {
+    this.router.navigate(['/scenarios']);
+  }
+
+  // Ouvre le modal d'alerte
+  showAlert() {
+    this.showAlertModal = true;
+  }
+
+  // Ferme le modal d'alerte
+  closeAlertModal() {
+    this.showAlertModal = false;
+  }
+
 }
