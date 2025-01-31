@@ -1,4 +1,4 @@
-import {Component, HostListener, OnInit} from '@angular/core';
+import { Component, HostListener, OnInit } from '@angular/core';
 import { MovieService } from '../../movie.service';
 import { Router } from '@angular/router';
 import { NgForOf, NgIf } from '@angular/common';
@@ -7,10 +7,7 @@ import { NgForOf, NgIf } from '@angular/common';
   selector: 'app-response-ia',
   templateUrl: './response-ia.component.html',
   styleUrls: ['./response-ia.component.css'],
-  imports: [
-    NgForOf,
-    NgIf
-  ]
+  imports: [NgForOf, NgIf],
 })
 export class ResponseIaComponent implements OnInit {
   discussions: { titre: string; id: number }[] = [];
@@ -20,12 +17,9 @@ export class ResponseIaComponent implements OnInit {
   isDeleteConfirmationOpen = false;
   scenarioToDelete: any; // Stocke l'ID du scénario à supprimer
   selectedCharacter: any = null; // Personnage sélectionné pour voir les détails
-  successMessage: string | null = null;  e
+  successMessage: string | null = null;
 
-  constructor(
-    private movieService: MovieService,
-    private router: Router
-  ) {}
+  constructor(private movieService: MovieService, private router: Router) {}
 
   ngOnInit(): void {
     this.loadScenarioList();
@@ -42,13 +36,15 @@ export class ResponseIaComponent implements OnInit {
     this.movieService.getScenarioList().subscribe({
       next: (data) => {
         this.discussions = data.map((item: any) => ({
-          titre:  item.titre,
+          titre: item.titre,
           id: item.id,
         }));
 
         if (this.discussions.length > 0) {
           this.selectedDiscussionIndex = this.discussions.length - 1;
-          this.loadScenarioDetails(this.discussions[this.selectedDiscussionIndex].id);
+          this.loadScenarioDetails(
+            this.discussions[this.selectedDiscussionIndex].id
+          );
         }
       },
       error: (err) => {
@@ -66,13 +62,16 @@ export class ResponseIaComponent implements OnInit {
     this.isLoading = true;
     this.movieService.getScenarioDetails(scenarioId).subscribe({
       next: (data) => {
-        console.log("je recois ainsi la reponse",data);
+        console.log('je recois ainsi la reponse', data);
         this.selectedScenarioDetails = data;
-        console.log("le data ressemble a ca ",this.selectedScenarioDetails);
+        console.log('le data ressemble a ca ', this.selectedScenarioDetails);
         this.isLoading = false;
       },
       error: (err) => {
-        console.error('Erreur lors du chargement des détails du scénario :', err);
+        console.error(
+          'Erreur lors du chargement des détails du scénario :',
+          err
+        );
         this.isLoading = false;
       },
     });
@@ -97,30 +96,34 @@ export class ResponseIaComponent implements OnInit {
         next: (response) => {
           console.log('Scénario supprimé:', response);
 
-          this.discussions = this.discussions.filter(discussion => discussion.id !== this.scenarioToDelete);
+          this.discussions = this.discussions.filter(
+            (discussion) => discussion.id !== this.scenarioToDelete
+          );
           this.closeDeleteConfirmation();
         },
-      error:(err)=>{
-        console.error('Erreur lors de la suppression:', err);
-        this.closeDeleteConfirmation();
-      }
-    });
+        error: (err) => {
+          console.error('Erreur lors de la suppression:', err);
+          this.closeDeleteConfirmation();
+        },
+      });
     }
-
   }
   // Supprimer un personnage
   deleteCharacter(): void {
     if (this.selectedCharacter) {
       this.movieService.deleteCharacter(this.selectedCharacter.id).subscribe({
         next: (response) => {
-          this.selectedScenarioDetails.b = this.selectedScenarioDetails.b.filter((p: {
-            id: any;
-          }) => p.id !== this.selectedCharacter.id);
+          this.selectedScenarioDetails.b =
+            this.selectedScenarioDetails.b.filter(
+              (p: { id: any }) => p.id !== this.selectedCharacter.id
+            );
           this.successMessage = response;
 
-          this.router.navigateByUrl('/response-ia', { skipLocationChange: true }).then(() => {
-            this.router.navigate([`/response-ia`]);
-          });
+          this.router
+            .navigateByUrl('/response-ia', { skipLocationChange: true })
+            .then(() => {
+              this.router.navigate([`/response-ia`]);
+            });
 
           setTimeout(() => {
             this.successMessage = null;
@@ -143,6 +146,4 @@ export class ResponseIaComponent implements OnInit {
   closeCharacterModal() {
     this.selectedCharacter = null;
   }
-
-
 }
