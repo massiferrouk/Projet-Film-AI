@@ -29,16 +29,13 @@ export class MovieService {
     return this.http.get(`${this.baseUrl}/scenarioList`);
   }
 
-  // Récupérer les détails d'un scénario
   getScenarioDetails(scenarioId: number): Observable<any> {
     const url = `${this.baseUrl}/scenarioDetail/${scenarioId}`;
     return this.http.get(url);
   }
   deleteScenario(scenarioID: number): Observable<any> {
-    return this.http.delete(`${this.baseUrl}/delete/scenario?scenarioID=${scenarioID}`);
+    return this.http.delete(`${this.baseUrl}/delete/scenario?scenarioID=${scenarioID}`,{ responseType: 'text' });
   }
-  deleteCharacter(characterId: number):Observable<any> {
-    return this.http.delete(`${this.baseUrl}/delete_personnage?personnageID=${characterId}`,{ responseType: 'text' });
-  }
+
 
 }

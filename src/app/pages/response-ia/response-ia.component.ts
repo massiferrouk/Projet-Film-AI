@@ -21,10 +21,9 @@ export class ResponseIaComponent implements OnInit {
   isDeleteConfirmationOpen = false;
   scenarioToDelete: any;
   selectedCharacter: any = null;
-  selectedCharacterCopy: any = null;
 
   successMessage: string | null = null;
-  private scenarioListUpdated = new Subject<void>(); // Subject pour notifier les changements
+  private scenarioListUpdated = new Subject<void>();
 
   constructor(
     private movieService: MovieService,
@@ -35,6 +34,10 @@ export class ResponseIaComponent implements OnInit {
     this.loadScenarioList();
     this.scenarioListUpdated.subscribe(() => {
       this.loadScenarioList();
+      this.router.navigateByUrl('/response-ia', { skipLocationChange: true }).then(() => {
+        this.router.navigate([`/response-ia`]);
+      });
+
     });
   }
 
@@ -93,7 +96,7 @@ export class ResponseIaComponent implements OnInit {
     if (this.scenarioToDelete) {
       this.movieService.deleteScenario(this.scenarioToDelete).subscribe({
         next: (response) => {
-          console.log('Scénario supprimé:', response);
+          alert(response)
           this.scenarioListUpdated.next();
           this.closeDeleteConfirmation();
         },
