@@ -3,7 +3,6 @@ import { Router ,ActivatedRoute} from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { MovieService } from '../../movie.service';
-import {LoadingModalComponent} from '../../loading-modal/loading-modal.component';
 
 
 interface Character {
@@ -15,7 +14,7 @@ interface Character {
 @Component({
   selector: 'app-scenario-created',
   standalone: true,
-  imports: [CommonModule, FormsModule, LoadingModalComponent],
+  imports: [CommonModule, FormsModule],
   templateUrl: './scenario-created2.component.html',
   styleUrls: ['./scenario-created2.component.css'],
 })
@@ -135,18 +134,18 @@ export class ScenarioCreated2Component {
   closeModal() {
     this.showModal = false;
   }
-  
+
   confirmScenario() {
     if (!this.userPlot.trim()) {
       console.error("Veuillez saisir une trame pour continuer.");
       return;
     }
-  
+
     this.showModal = false;
     this.generateScenario();
   }
-  
-  
+
+
 
   deleteCharacter(index: number) {
     this.charactersArray.splice(index, 1);
@@ -157,11 +156,11 @@ export class ScenarioCreated2Component {
       this.selectedCharacterIndex--;
     }
   }
-  
+
   editCharacter(index: number) {
     this.selectCharacter(index);
   }
-  
+
 
   generateScenario() {
     if (!this.titre || !this.userPlot || this.charactersArray.length === 0) {
@@ -169,6 +168,7 @@ export class ScenarioCreated2Component {
       return;
     }
     this.isLoading = true;
+    console.log(this.styleId,this.titre,this.userPlot,this.charactersArray);
     this.movieService.generateScenario(this.styleId, this.titre, this.charactersArray, this.userPlot).subscribe({
       next: (response) => {
         const newScenario = {

@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { MovieService } from '../../movie.service'; // Assurez-vous d'importer le bon service
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { NgForOf, NgIf } from '@angular/common';
 
 @Component({
@@ -13,9 +13,13 @@ import { NgForOf, NgIf } from '@angular/common';
   ]
 })
 export class ResponseIaComponent implements OnInit {
-  discussions: { titre: string; scenario: string }[] = [];
+  discussions: { titre: string; id: number }[] = [];
   selectedDiscussionIndex: number | null = null;
   isLoading = false;
+  selectedScenarioDetails: any = null;
+  isDeleteConfirmationOpen = false;
+  scenarioToDelete: any; // Stocke l'ID du scénario à supprimer
+  selectedCharacter: any = null; // Personnage sélectionné pour voir les détails
 
 
   constructor(
@@ -24,28 +28,22 @@ export class ResponseIaComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-
-    const navigation = history.state;
-    if (!navigation) {
-      console.error("Données manquantes pour le scénario !");
-    } else {
-      this.discussions = [{
-        titre: navigation.titre,
-        scenario: navigation.scenario
-      }];
-    }
+    // Charger la liste des scénarios
     this.loadScenarioList();
   }
 
   loadScenarioList(): void {
-
     this.movieService.getScenarioList().subscribe({
       next: (data) => {
-        const limitedData = data.slice(0, 3); // Récupère les trois premiers scénarios
-        this.discussions = limitedData.map((item: any, index: number) => ({
-          titre: `Discussion ${index + 1}`, // Titre dynamique
-          scenario: item.scenario,
+        this.discussions = data.map((item: any) => ({
+          titre:  item.titre,
+          id: item.id,
         }));
+
+        if (this.discussions.length > 0) {
+          this.selectedDiscussionIndex = this.discussions.length - 1;
+          this.loadScenarioDetails(this.discussions[this.selectedDiscussionIndex].id);
+        }
       },
       error: (err) => {
         console.error('Erreur lors du chargement des scénarios :', err);
@@ -53,11 +51,85 @@ export class ResponseIaComponent implements OnInit {
     });
   }
 
-
   selectDiscussion(index: number): void {
     this.selectedDiscussionIndex = index;
+    this.loadScenarioDetails(this.discussions[index].id);
   }
+
+  // Méthode pour récupérer les détails du scénario sélectionné
+  loadScenarioDetails(scenarioId: number): void {
+    this.isLoading = true;
+    this.movieService.getScenarioDetails(scenarioId).subscribe({
+      next: (data) => {
+        console.log("je recois ainsi la reponse",data);
+        this.selectedScenarioDetails = data;
+        console.log("le data ressemble a ca ",this.selectedScenarioDetails);
+        this.isLoading = false;
+      },
+      error: (err) => {
+        console.error('Erreur lors du chargement des détails du scénario :', err);
+        this.isLoading = false;
+      },
+    });
+  }
+
   generateNewScenario() {
     this.router.navigate(['/scenarios']);
   }
+  openDeleteConfirmation(scenarioId: number) {
+    this.scenarioToDelete = scenarioId;
+    this.isDeleteConfirmationOpen = true;
+  }
+  // Fermer le pop-up sans effectuer de suppression
+  closeDeleteConfirmation() {
+    this.isDeleteConfirmationOpen = false;
+    this.scenarioToDelete = null;
+  }
+
+  deleteScenario(): void {
+    // @ts-ignore
+    if (this.scenarioToDelete) {
+      this.movieService.deleteScenario(this.scenarioToDelete).subscribe({
+        next: (response) => {
+          console.log('Scénario supprimé:', response);
+
+          this.discussions = this.discussions.filter(discussion => discussion.id !== this.scenarioToDelete);
+          this.closeDeleteConfirmation();
+        },
+      error:(err)=>{
+        console.error('Erreur lors de la suppression:', err);
+        this.closeDeleteConfirmation();
+      }
+    });
+    }
+
+  }
+  // Supprimer un personnage
+  deleteCharacter(): void {
+    if (this.selectedCharacter) {
+      this.movieService.deleteCharacter(this.selectedCharacter.id).subscribe({
+        next: (response) => {
+          this.selectedScenarioDetails.b = this.selectedScenarioDetails.b.filter((p: {
+            id: any;
+          }) => p.id !== this.selectedCharacter.id);
+          this.closeDeleteConfirmation();
+          this.closeDeleteConfirmation();
+        },
+        error: (err) => {
+          console.error('Erreur lors de la suppression:', err);
+          this.closeDeleteConfirmation();
+        },
+      });
+    }
+  }
+  // Ouvrir le modal de personnage
+  openCharacterModal(character: any) {
+    this.selectedCharacter = character;
+  }
+
+  closeCharacterModal() {
+    this.selectedCharacter = null;
+  }
+
+
 }
