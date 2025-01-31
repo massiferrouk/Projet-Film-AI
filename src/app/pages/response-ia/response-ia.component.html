@@ -1,6 +1,11 @@
-<div class="w-full flex flex-col md:flex-row">
+<!-- Afficher le message de succès -->
+<div *ngIf="successMessage" class="fixed top-10 left-1/2 transform -translate-x-1/2 bg-green-500 text-white py-2 px-4 rounded-md shadow-md transition duration-500 ease-in-out">
+  <p>{{ successMessage }}</p>
+</div>
+
+<div class="w-full flex flex-col md:flex-row h-screen">
   <!-- Historique des scénarios à gauche -->
-  <div class="w-full md:w-1/4 p-6 overflow-y-auto bg-gray-100 border-r">
+  <div class="w-full md:w-1/4 p-6 bg-gray-100 border-r fixed top-0 left-0 bottom-0 overflow-y-auto z-10">
     <h2 class="text-2xl font-extrabold text-blue-600 mb-6">Historique des Scénarios</h2>
     <ul class="space-y-4 overflow-auto max-h-[75vh] scrollbar-thin scrollbar-thumb-blue-500 scrollbar-track-gray-200">
       <li *ngFor="let discussion of discussions; let i = index"
@@ -21,39 +26,46 @@
   </div>
 
   <!-- Détails du scénario et des personnages au centre -->
-  <div class="flex-1 p-8 flex flex-col items-center">
+  <div class="flex-1 p-8 flex flex-col items-center overflow-y-auto pl-6 ml-[25%]">
     <header class="w-full max-w-4xl text-center mb-6">
       <h1 class="text-3xl font-extrabold text-blue-600">Scénario Généré</h1>
       <p class="text-gray-600 mt-2">Consultez vos scénarios et générez-en de nouveaux.</p>
     </header>
 
+    <button class="w-full lg:w-1/4 px-3 py-2 mb-4 bg-gradient-to-r from-blue-500 to-blue-500 text-white font-semibold rounded-lg shadow-lg hover:opacity-90 transition"
+            (click)="generateNewScenario()">
+      Générer un Nouveau Scénario
+    </button>
+
     <div class="w-full max-w-4xl p-6 bg-gray-50 rounded-lg shadow-xl space-y-6">
       <h2 class="text-xl font-bold text-blue-600">Détails du Scénario</h2>
-      <div class="border p-4 rounded-lg bg-white h-64 overflow-y-auto shadow-md">
-        <div *ngIf="isLoading" class="text-blue-500">Chargement...</div>
-        <div *ngIf="!isLoading && selectedScenarioDetails">
-          <p><strong>Titre :</strong> {{ selectedScenarioDetails.a.titre }}</p>
-          <p><strong>Trame de l'Histoire :</strong> {{ selectedScenarioDetails.a.tramHistoire }}</p>
+      <div *ngIf="isLoading" class="text-blue-500">Chargement...</div>
+      <div *ngIf="!isLoading && selectedScenarioDetails">
+        <p><strong>Titre :</strong> {{ selectedScenarioDetails.a.titre }}</p>
+        <p><strong>Trame de l'Histoire :</strong> {{ selectedScenarioDetails.a.tramHistoire }}</p>
 
-          <h3 class="text-lg font-semibold mt-4">Personnages :</h3>
-          <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 mt-2">
-            <div *ngFor="let personnage of selectedScenarioDetails.b; let i = index"
-                 (click)="openCharacterModal(personnage)"
-                 class="p-4 bg-white rounded-lg shadow-md hover:shadow-lg cursor-pointer transition transform hover:scale-105">
-              <h4 class="text-lg font-bold text-blue-600">{{ personnage.nomPersonnage }}</h4>
-              <p class="text-sm text-gray-700">{{ personnage.traitsPersonnalite.join(', ') }}</p>
-            </div>
+        <h3 class="text-lg text-center font-semibold mt-4">Personnages :</h3>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 mt-2">
+          <div *ngFor="let personnage of selectedScenarioDetails.b; let i = index"
+               (click)="openCharacterModal(personnage)"
+               class="p-4 bg-white rounded-lg shadow-md hover:shadow-lg cursor-pointer transition transform hover:scale-105">
+            <h4 class="text-lg font-bold text-blue-600">{{ personnage.nomPersonnage }}</h4>
+            <p class="text-sm text-gray-700">{{ personnage.traitsPersonnalite.join(', ') }}</p>
           </div>
         </div>
+
+        <div class="border p-4 rounded-lg bg-white shadow-md mt-4">
+          <div *ngIf="selectedScenarioDetails.a.response" class="response-container">
+            <h3 class="text-lg text-center font-semibold mt-4">Réponse générée :</h3>
+            <p class="response-text">{{ selectedScenarioDetails.a.response }}</p>
+          </div>
+        </div>
+
         <p *ngIf="!isLoading && !selectedScenarioDetails" class="text-gray-500">
           Aucun scénario sélectionné ou disponible.
         </p>
       </div>
-
-      <button class="w-full lg:w-1/2 px-4 py-2 bg-gradient-to-r from-blue-500 to-blue-700 text-white font-semibold rounded-lg shadow-lg hover:opacity-90 transition"
-              (click)="generateNewScenario()">
-        Générer un Nouveau Scénario
-      </button>
     </div>
   </div>
 </div>

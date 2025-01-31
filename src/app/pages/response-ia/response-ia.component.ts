@@ -1,5 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import { MovieService } from '../../movie.service'; // Assurez-vous d'importer le bon service
+import {Component, HostListener, OnInit} from '@angular/core';
+import { MovieService } from '../../movie.service';
 import { Router } from '@angular/router';
 import { NgForOf, NgIf } from '@angular/common';
 
@@ -20,7 +20,7 @@ export class ResponseIaComponent implements OnInit {
   isDeleteConfirmationOpen = false;
   scenarioToDelete: any; // Stocke l'ID du scénario à supprimer
   selectedCharacter: any = null; // Personnage sélectionné pour voir les détails
-
+  successMessage: string | null = null;  e
 
   constructor(
     private movieService: MovieService,
@@ -28,8 +28,14 @@ export class ResponseIaComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    // Charger la liste des scénarios
     this.loadScenarioList();
+  }
+
+  @HostListener('document:click', ['$event'])
+  onClick(event: MouseEvent) {
+    if (this.isDeleteConfirmationOpen) {
+      this.closeDeleteConfirmation();
+    }
   }
 
   loadScenarioList(): void {
@@ -55,7 +61,6 @@ export class ResponseIaComponent implements OnInit {
     this.selectedDiscussionIndex = index;
     this.loadScenarioDetails(this.discussions[index].id);
   }
-
   // Méthode pour récupérer les détails du scénario sélectionné
   loadScenarioDetails(scenarioId: number): void {
     this.isLoading = true;
@@ -72,13 +77,13 @@ export class ResponseIaComponent implements OnInit {
       },
     });
   }
-
   generateNewScenario() {
     this.router.navigate(['/scenarios']);
   }
   openDeleteConfirmation(scenarioId: number) {
     this.scenarioToDelete = scenarioId;
     this.isDeleteConfirmationOpen = true;
+    this.closeCharacterModal();
   }
   // Fermer le pop-up sans effectuer de suppression
   closeDeleteConfirmation() {
@@ -87,7 +92,6 @@ export class ResponseIaComponent implements OnInit {
   }
 
   deleteScenario(): void {
-    // @ts-ignore
     if (this.scenarioToDelete) {
       this.movieService.deleteScenario(this.scenarioToDelete).subscribe({
         next: (response) => {
@@ -112,7 +116,15 @@ export class ResponseIaComponent implements OnInit {
           this.selectedScenarioDetails.b = this.selectedScenarioDetails.b.filter((p: {
             id: any;
           }) => p.id !== this.selectedCharacter.id);
-          this.closeDeleteConfirmation();
+          this.successMessage = response;
+
+          this.router.navigateByUrl('/response-ia', { skipLocationChange: true }).then(() => {
+            this.router.navigate([`/response-ia`]);
+          });
+
+          setTimeout(() => {
+            this.successMessage = null;
+          }, 3000);
           this.closeDeleteConfirmation();
         },
         error: (err) => {
@@ -125,6 +137,7 @@ export class ResponseIaComponent implements OnInit {
   // Ouvrir le modal de personnage
   openCharacterModal(character: any) {
     this.selectedCharacter = character;
+    this.isDeleteConfirmationOpen = false;
   }
 
   closeCharacterModal() {
