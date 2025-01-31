@@ -1,8 +1,6 @@
-<!-- Afficher le message de succès -->
 <div *ngIf="successMessage" class="fixed top-10 left-1/2 transform -translate-x-1/2 bg-green-500 text-white py-2 px-4 rounded-md shadow-md transition duration-500 ease-in-out">
   <p>{{ successMessage }}</p>
 </div>
-
 <div class="w-full flex flex-col md:flex-row h-screen">
   <!-- Historique des scénarios à gauche -->
   <div class="w-full md:w-1/4 p-6 bg-gray-100 border-r fixed top-0 left-0 bottom-0 overflow-y-auto z-10">
@@ -18,8 +16,9 @@
           </span>
           <button (click)="openDeleteConfirmation(discussion.id)"
                   class="text-red-500 hover:text-red-700 focus:outline-none transition">
-            <i class="fas fa-trash-alt"></i>
+            X
           </button>
+
         </div>
       </li>
     </ul>
@@ -71,16 +70,18 @@
 </div>
 
 <!-- Modal de Détails du Personnage -->
+<!-- Modal de Détails du Personnage -->
 <div *ngIf="selectedCharacter"
-     class="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
+     class="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center modal">
   <div class="bg-white p-6 rounded-lg shadow-lg w-full sm:w-96">
     <h3 class="text-2xl font-semibold text-blue-600">{{ selectedCharacter.nomPersonnage }}</h3>
     <p class="text-lg text-gray-800 mt-2"><strong>Traits de personnalité:</strong> {{ selectedCharacter.traitsPersonnalite.join(', ') }}</p>
     <p class="mt-4 text-gray-600"><strong>Description:</strong> {{ selectedCharacter.description }}</p>
+
+    <!-- Le bouton de suppression est supprimé -->
     <div class="mt-6 flex justify-between">
-      <button (click)="closeCharacterModal()" class="px-4 py-2 bg-gray-300 rounded-lg text-gray-700">Fermer</button>
-      <button (click)="openDeleteConfirmation(selectedCharacter.id)" class="px-4 py-2 bg-red-500 text-white rounded-lg">
-        Supprimer
+      <button (click)="closeCharacterModal()" class="px-4 py-2 bg-gray-300 rounded-lg text-gray-700">
+        Fermer
       </button>
     </div>
   </div>
@@ -88,7 +89,7 @@
 
 <!-- Confirmation de Suppression -->
 <div *ngIf="isDeleteConfirmationOpen"
-     class="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
+     class="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center modal2">
   <div class="bg-white p-6 rounded-lg shadow-lg w-full sm:w-96">
     <h3 class="text-lg font-semibold text-gray-700">Confirmer la suppression</h3>
     <p>Êtes-vous sûr de vouloir supprimer ce personnage ?</p>
@@ -96,7 +97,7 @@
       <button (click)="closeDeleteConfirmation()" class="px-4 py-2 bg-gray-300 rounded-lg text-gray-700 mr-2">
         Annuler
       </button>
-      <button (click)="deleteCharacter()" class="px-4 py-2 bg-red-500 rounded-lg text-white">
+      <button (click)="deleteScenario()" class="px-4 py-2 bg-red-500 rounded-lg text-white">
         Supprimer
       </button>
     </div>

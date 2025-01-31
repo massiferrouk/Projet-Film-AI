@@ -38,7 +38,7 @@ export class MovieService {
     return this.http.delete(`${this.baseUrl}/delete/scenario?scenarioID=${scenarioID}`);
   }
   deleteCharacter(characterId: number):Observable<any> {
-    return this.http.delete(`${this.baseUrl}/delete_personnage?personnageID=${characterId}`);
+    return this.http.delete(`${this.baseUrl}/delete_personnage?personnageID=${characterId}`,{ responseType: 'text' });
   }
 
 }
