@@ -1,18 +1,22 @@
-<div class="w-full h-screen flex flex-col items-center justify-center bg-gradient-to-br from-gray-100 via-gray-200 to-gray-300">
-  <div class="w-11/12 max-w-5xl flex flex-col items-center border border-blue-500 rounded-2xl shadow-xl bg-white p-8">
-    <header class="w-full text-center mb-6">
-      <h1 class="text-3xl font-extrabold text-blue-600">Modifier les Styles</h1>
-      <p class="text-gray-600 mt-2">Ajoutez, éditez ou supprimez vos styles préférés.</p>
+<div class="w-full min-h-screen flex flex-col items-center justify-center bg-gradient-to-br from-gray-100 via-gray-200 to-gray-300 overflow-hidden p-4">
+  <!-- Conteneur principal -->
+  <div class="w-11/12 max-w-5xl min-w-[280px] flex flex-col items-center border border-blue-500 rounded-2xl shadow-xl bg-white p-2 sm:p-8 animate-fade-in">
+    <!-- En-tête -->
+    <header class="w-full text-center mb-2 sm:mb-6">
+      <h1 class="text-xl sm:text-2xl md:text-3xl font-extrabold text-blue-600 animate-fade-in-down">Modifier les Styles</h1>
+      <p class="text-gray-600 mt-1 sm:mt-2 text-xs sm:text-sm md:text-base animate-fade-in-up animate-delay-100">Ajoutez, éditez ou supprimez vos styles préférés.</p>
     </header>
 
-    <div class="w-full flex justify-between items-center mb-6 px-4">
+    <!-- Boutons d'action -->
+    <div class="w-full flex flex-col sm:flex-row justify-between items-center mb-2 sm:mb-6 px-1 sm:px-4 gap-2 sm:gap-0">
+      <!-- Bouton Retour -->
       <button
-        class="px-4 py-2 bg-gradient-to-r from-blue-500 to-blue-700 text-white rounded-lg shadow-md hover:opacity-90 transition flex items-center justify-center"
+        class="w-full sm:w-auto px-2 py-1 sm:px-4 sm:py-2 bg-gradient-to-r from-blue-500 to-blue-700 text-white rounded-lg shadow-md hover:opacity-90 transition flex items-center justify-center text-xs sm:text-sm md:text-base animate-fade-in-left"
         (click)="goBack()"
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
-          class="h-5 w-5"
+          class="h-3 w-3 sm:h-4 sm:w-4 md:h-5 md:w-5"
           fill="none"
           viewBox="0 0 24 24"
           stroke="currentColor"
@@ -20,16 +24,17 @@
         >
           <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
         </svg>
-        <span class="ml-2">Retour</span>
+        <span class="ml-1 sm:ml-2">Retour</span>
       </button>
 
+      <!-- Bouton Ajouter Style -->
       <button
-        class="px-6 py-3 bg-gradient-to-r from-blue-500 to-blue-700 text-white font-semibold rounded-lg shadow-md hover:opacity-90 transition flex items-center"
+        class="w-full sm:w-auto px-3 py-1 sm:px-6 sm:py-2 bg-gradient-to-r from-blue-500 to-blue-700 text-white font-semibold rounded-lg shadow-md hover:opacity-90 transition flex items-center justify-center text-xs sm:text-sm md:text-base animate-fade-in-right"
         (click)="openCreateModal()"
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
-          class="h-5 w-5"
+          class="h-3 w-3 sm:h-4 sm:w-4 md:h-5 md:w-5"
           fill="none"
           viewBox="0 0 24 24"
           stroke="currentColor"
@@ -37,30 +42,33 @@
         >
           <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
         </svg>
-        <span class="ml-2">Ajouter Style</span>
+        <span class="ml-1 sm:ml-2">Ajouter Style</span>
       </button>
     </div>
 
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 w-full px-4 lg:px-12">
+    <!-- Grille des styles -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 w-full px-2 sm:px-4 lg:px-12">
+      <!-- Carte de style -->
       <div
         *ngFor="let style of styles; let i = index"
-        class="flex flex-col items-center p-4 border rounded-lg shadow-md hover:shadow-lg transition hover:bg-blue-50"
+        class="flex flex-col items-center p-2 sm:p-4 border rounded-lg shadow-md hover:shadow-lg transition transform hover:scale-105 animate-fade-in-up"
       >
         <img
           [src]="style.imgSrc"
           alt="Style Image"
-          class="w-full h-48 rounded-lg object-cover shadow mb-4"
+          class="w-full aspect-square min-h-[150px] rounded-lg object-cover shadow mb-2 sm:mb-4"
+          loading="lazy"
         />
-        <p class="text-lg font-semibold text-center mb-2">{{ style.title }}</p>
-        <div class="flex space-x-4">
+        <p class="text-sm sm:text-base md:text-lg font-semibold text-center mb-2">{{ style.title }}</p>
+        <div class="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-2">
           <button
-            class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"
+            class="px-2 py-1 sm:px-4 sm:py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition transform hover:scale-105 active:scale-95 text-xs sm:text-sm md:text-base"
             (click)="openEditModal(i)"
           >
             Modifier
           </button>
           <button
-            class="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition"
+            class="px-2 py-1 sm:px-4 sm:py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition transform hover:scale-105 active:scale-95 text-xs sm:text-sm md:text-base"
             (click)="deleteStyle(i)"
           >
             Supprimer
@@ -70,8 +78,9 @@
     </div>
   </div>
 
-  <div *ngIf="showEditModal" class="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
-    <div class="bg-white p-6 rounded-lg shadow-xl w-11/12 max-w-lg">
+  <!-- Modale d'édition -->
+  <div *ngIf="showEditModal" class="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center p-4">
+    <div class="bg-white p-6 rounded-lg shadow-xl w-11/12 max-w-lg min-w-[280px] max-h-[90vh] overflow-y-auto transform transition-all duration-300 animate-pop-in">
       <h2 class="text-xl font-bold mb-4">Modifier le Style</h2>
       <input
         type="text"
@@ -85,15 +94,15 @@
         placeholder="Description du style"
         rows="4"
       ></textarea>
-      <div class="flex justify-end space-x-4">
+      <div class="flex flex-col sm:flex-row justify-end space-y-2 sm:space-y-0 sm:space-x-4">
         <button
-          class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"
+          class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition transform hover:scale-105 active:scale-95"
           (click)="saveEdit()"
         >
           Enregistrer
         </button>
         <button
-          class="px-4 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600 transition"
+          class="px-4 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600 transition transform hover:scale-105 active:scale-95"
           (click)="closeEditModal()"
         >
           Annuler
@@ -102,8 +111,9 @@
     </div>
   </div>
 
-  <div *ngIf="showCreateModal" class="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
-    <div class="bg-white p-6 rounded-lg shadow-xl w-11/12 max-w-lg">
+  <!-- Modale de création -->
+  <div *ngIf="showCreateModal" class="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center p-4">
+    <div class="bg-white p-6 rounded-lg shadow-xl w-11/12 max-w-lg min-w-[280px] max-h-[90vh] overflow-y-auto transform transition-all duration-300 animate-pop-in">
       <h2 class="text-xl font-bold mb-4">Créer un Nouveau Style</h2>
       <input
         type="text"
@@ -117,20 +127,19 @@
         placeholder="Description du style"
         rows="4"
       ></textarea>
-      <input
-        type="file"
-        class="border rounded px-4 py-2 w-full mb-4"
-        (change)="onFileSelected($event)"
-      />
-      <div class="flex justify-end space-x-4">
+      <label class="block w-full bg-blue-600 text-white text-center px-4 py-2 rounded-lg cursor-pointer hover:bg-blue-700 transition mb-4">
+        <span>Télécharger une image</span>
+        <input type="file" class="hidden" (change)="onFileSelected($event)" />
+      </label>
+      <div class="flex flex-col sm:flex-row justify-end space-y-2 sm:space-y-0 sm:space-x-4">
         <button
-          class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"
+          class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition transform hover:scale-105 active:scale-95"
           (click)="saveCreate()"
         >
           Ajouter
         </button>
         <button
-          class="px-4 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600 transition"
+          class="px-4 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600 transition transform hover:scale-105 active:scale-95"
           (click)="closeCreateModal()"
         >
           Annuler
@@ -138,26 +147,31 @@
       </div>
     </div>
   </div>
-<div *ngIf="showDeleteModal" class="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
-  <div class="bg-white p-6 rounded-lg shadow-xl w-11/12 max-w-md">
-    <h2 class="text-xl font-bold mb-4 text-center">Confirmer la suppression</h2>
-    <p class="text-gray-600 mb-6 text-center">
-      Voulez-vous vraiment supprimer ce style ?
-    </p>
-    <div class="flex justify-between">
-      <button
-        class="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition"
-        (click)="confirmDelete()"
-      >
-        Oui, Supprimer
-      </button>
-      <button
-        class="px-4 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600 transition"
-        (click)="cancelDelete()"
-      >
-        Annuler
-      </button>
+
+  <!-- Modale de suppression -->
+  <div *ngIf="showDeleteModal" class="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center p-4">
+    <div class="bg-white p-6 rounded-lg shadow-xl w-11/12 max-w-md min-w-[280px] transform transition-all duration-300 animate-pop-in">
+      <div class="text-center">
+        <svg class="w-12 h-12 mx-auto mb-4 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+        </svg>
+        <h2 class="text-xl font-bold mb-4">Confirmer la suppression</h2>
+        <p class="text-gray-600 mb-6">Voulez-vous vraiment supprimer ce style ?</p>
+      </div>
+      <div class="flex flex-col sm:flex-row justify-between space-y-2 sm:space-y-0 sm:space-x-4">
+        <button
+          class="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition transform hover:scale-105 active:scale-95"
+          (click)="confirmDelete()"
+        >
+          Oui, Supprimer
+        </button>
+        <button
+          class="px-4 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600 transition transform hover:scale-105 active:scale-95"
+          (click)="cancelDelete()"
+        >
+          Annuler
+        </button>
+      </div>
     </div>
   </div>
-</div>
 </div>

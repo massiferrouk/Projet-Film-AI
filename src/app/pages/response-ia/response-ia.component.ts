@@ -20,7 +20,7 @@ export class ResponseIaComponent implements OnInit {
   isDeleteConfirmationOpen = false;
   scenarioToDelete: any; // Stocke l'ID du scénario à supprimer
   selectedCharacter: any = null; // Personnage sélectionné pour voir les détails
-  successMessage: string | null = null;  e
+  successMessage: string | null = null;  
 
   constructor(
     private movieService: MovieService,

@@ -4,23 +4,64 @@ app-movie-card.selected {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); 
     transform: scale(1.05);
     transition: all 0.2s ease-in-out;
+    width: fit-content;
   }
   app-movie-card {
     border: 2px solid transparent;
     transition: all 0.2s ease-in-out;
+    width: fit-content;
   }
   
   app-movie-card:hover {
-    border: 2px solid #94a3b8;
     transform: scale(1.02);
+    width: fit-content;
   }
   
   app-movie-card.selected:hover {
     transform: scale(1.1);
+    width: fit-content;
   }
   
   .selected {
     border: 2px solid #2563eb; /* Bleu fort pour indiquer la sélection */
     background-color: #eff6ff; /* Bleu clair pour le fond */
   }
+
+  /* Animations */
+@keyframes fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes pop-in {
+  from {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Appliquer les animations */
+.animate-fade-in {
+  animation: fade-in 1s ease-out forwards;
+}
+
+.animate-fade-in-delay {
+  animation: fade-in 1s ease-out 0.5s forwards;
+  opacity: 0;
+}
+
+.animate-pop-in {
+  animation: pop-in 0.5s ease-out forwards;
+  opacity: 0;
+}
   

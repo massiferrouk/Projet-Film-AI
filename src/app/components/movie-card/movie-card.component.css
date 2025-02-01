@@ -1,12 +1,11 @@
 .movie-card {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: flex-start;
-    transition: transform 0.2s ease-in-out;
-  }
-  
-  .movie-card:hover {
-    transform: scale(1.05);
-  }
-  
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  transition: transform 0.2s ease-in-out;
+}
+
+.movie-card:hover {
+  transform: scale(1.05);
+}
