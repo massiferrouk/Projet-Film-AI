@@ -1,8 +1,14 @@
-<div class="w-full h-screen flex flex-col items-center justify-center bg-gradient-to-br from-gray-100 via-gray-200 to-gray-300">
-  <div class="w-11/12 max-w-5xl flex flex-col items-center border border-blue-500 rounded-2xl shadow-xl bg-white p-8">
+<div
+  class="w-full h-screen flex flex-col items-center justify-center bg-gradient-to-br from-gray-100 via-gray-200 to-gray-300"
+>
+  <div
+    class="w-11/12 max-w-5xl flex flex-col items-center border border-blue-500 rounded-2xl shadow-xl bg-white p-8"
+  >
     <header class="w-full text-center mb-6">
       <h1 class="text-3xl font-extrabold text-blue-600">Modifier les Styles</h1>
-      <p class="text-gray-600 mt-2">Ajoutez, éditez ou supprimez vos styles préférés.</p>
+      <p class="text-gray-600 mt-2">
+        Ajoutez, éditez ou supprimez vos styles préférés.
+      </p>
     </header>
 
     <div class="w-full flex justify-between items-center mb-6 px-4">
@@ -18,7 +24,11 @@
           stroke="currentColor"
           stroke-width="2"
         >
-          <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            d="M15 19l-7-7 7-7"
+          />
         </svg>
         <span class="ml-2">Retour</span>
       </button>
@@ -35,23 +45,31 @@
           stroke="currentColor"
           stroke-width="2"
         >
-          <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            d="M12 4v16m8-8H4"
+          />
         </svg>
         <span class="ml-2">Ajouter Style</span>
       </button>
     </div>
 
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 w-full px-4 lg:px-12">
+    <div
+      class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 w-full px-4 lg:px-12"
+    >
       <div
-        *ngFor="let style of styles; let i = index"
+        *ngFor="let scenario of scenarios; let i = index"
         class="flex flex-col items-center p-4 border rounded-lg shadow-md hover:shadow-lg transition hover:bg-blue-50"
       >
         <img
-          [src]="style.imgSrc"
+          [src]="scenario.imgUrl"
           alt="Style Image"
           class="w-full h-48 rounded-lg object-cover shadow mb-4"
         />
-        <p class="text-lg font-semibold text-center mb-2">{{ style.title }}</p>
+        <p class="text-lg font-semibold text-center mb-2">
+          {{ scenario.titre }}
+        </p>
         <div class="flex space-x-4">
           <button
             class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"
@@ -61,7 +79,7 @@
           </button>
           <button
             class="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition"
-            (click)="deleteStyle(i)"
+            (click)="deleteScenario(i)"
           >
             Supprimer
           </button>
@@ -70,18 +88,21 @@
     </div>
   </div>
 
-  <div *ngIf="showEditModal" class="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
+  <div
+    *ngIf="showEditModal"
+    class="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center"
+  >
     <div class="bg-white p-6 rounded-lg shadow-xl w-11/12 max-w-lg">
       <h2 class="text-xl font-bold mb-4">Modifier le Style</h2>
       <input
         type="text"
         class="border rounded px-4 py-2 w-full mb-4"
-        [(ngModel)]="editedStyleTitle"
+        [(ngModel)]="editedScenarioTitle"
         placeholder="Nouveau nom du style"
       />
       <textarea
         class="border rounded px-4 py-2 w-full mb-4"
-        [(ngModel)]="editedStyleDescription"
+        [(ngModel)]="editedScenarioDescription"
         placeholder="Description du style"
         rows="4"
       ></textarea>
@@ -102,18 +123,21 @@
     </div>
   </div>
 
-  <div *ngIf="showCreateModal" class="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
+  <div
+    *ngIf="showCreateModal"
+    class="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center"
+  >
     <div class="bg-white p-6 rounded-lg shadow-xl w-11/12 max-w-lg">
       <h2 class="text-xl font-bold mb-4">Créer un Nouveau Style</h2>
       <input
         type="text"
         class="border rounded px-4 py-2 w-full mb-4"
-        [(ngModel)]="newStyleTitle"
+        [(ngModel)]="newScenarioTitle"
         placeholder="Nom du style"
       />
       <textarea
         class="border rounded px-4 py-2 w-full mb-4"
-        [(ngModel)]="newStyleDescription"
+        [(ngModel)]="newScenarioDescription"
         placeholder="Description du style"
         rows="4"
       ></textarea>
@@ -138,26 +162,32 @@
       </div>
     </div>
   </div>
-<div *ngIf="showDeleteModal" class="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
-  <div class="bg-white p-6 rounded-lg shadow-xl w-11/12 max-w-md">
-    <h2 class="text-xl font-bold mb-4 text-center">Confirmer la suppression</h2>
-    <p class="text-gray-600 mb-6 text-center">
-      Voulez-vous vraiment supprimer ce style ?
-    </p>
-    <div class="flex justify-between">
-      <button
-        class="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition"
-        (click)="confirmDelete()"
-      >
-        Oui, Supprimer
-      </button>
-      <button
-        class="px-4 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600 transition"
-        (click)="cancelDelete()"
-      >
-        Annuler
-      </button>
+
+  <div
+    *ngIf="showDeleteModal"
+    class="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center"
+  >
+    <div class="bg-white p-6 rounded-lg shadow-xl w-11/12 max-w-md">
+      <h2 class="text-xl font-bold mb-4 text-center">
+        Confirmer la suppression
+      </h2>
+      <p class="text-gray-600 mb-6 text-center">
+        Voulez-vous vraiment supprimer ce style ?
+      </p>
+      <div class="flex justify-between">
+        <button
+          class="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition"
+          (click)="confirmDelete()"
+        >
+          Oui, Supprimer
+        </button>
+        <button
+          class="px-4 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600 transition"
+          (click)="cancelDelete()"
+        >
+          Annuler
+        </button>
+      </div>
     </div>
   </div>
-</div>
 </div>

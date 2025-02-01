@@ -1,9 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { StylesService } from '../../services/styles.service';
-import { Style } from '../../models/style.model';
+import { DataService, Scenario } from '../../services/dataSenario.service';
 
 @Component({
   selector: 'app-edit-styles',
@@ -12,68 +11,93 @@ import { Style } from '../../models/style.model';
   templateUrl: './edit-styles.component.html',
   styleUrls: ['./edit-styles.component.css'],
 })
-export class EditStylesComponent {
-  styles: Style[] = [];
-  
+export class EditStylesComponent implements OnInit {
+  scenarios: Scenario[] = [];
   showEditModal = false;
   showCreateModal = false;
-  showDeleteModal = false;
+  showDeleteModal = false
 
-  editedStyleIndex: number | null = null;
-  editedStyleTitle: string = '';
-  editedStyleDescription: string = '';
+  editedScenarioIndex: number | null = null;
+  editedScenarioTitle: string = '';
+  editedScenarioDescription: string = '';
 
-  newStyleTitle: string = '';
-  newStyleDescription: string = '';
-  newStyleImg: string | null = null;
+  newScenarioTitle: string = '';
+  newScenarioDescription: string = '';
+  newScenarioImg: string | null = null;
 
-  styleToDeleteIndex: number | null = null;
+  scenarioToDeleteIndex: number | null = null
 
-  constructor(private router: Router, private stylesService: StylesService) {
-    this.styles = this.stylesService.getStyles();
+  constructor(private router: Router, private dataService: DataService) {}
+
+  ngOnInit(): void {
+    this.getScenarios();
   }
 
-  deleteStyle(index: number) {
-    // Ouvrir la modale de confirmation
-    this.styleToDeleteIndex = index;
-    this.showDeleteModal = true;
-  }
-
-  confirmDelete() {
-    // Supprimer le style si l'index est défini
-    if (this.styleToDeleteIndex !== null) {
-      this.stylesService.deleteStyle(this.styleToDeleteIndex);
-      this.styles = this.stylesService.getStyles();
+  async getScenarios(): Promise<void> {
+    try {
+      const response = await this.dataService.getData();
+      this.scenarios = response;
+    } catch (error) {
+      console.error('Error fetching data', error);
     }
-    this.cancelDelete(); // Fermer la modale
   }
 
-  cancelDelete() {
-    // Réinitialiser les variables et fermer la modale
-    this.styleToDeleteIndex = null;
-    this.showDeleteModal = false;
+
+
+deleteScenario(index: number) {
+  this.scenarioToDeleteIndex = index;
+  this.showDeleteModal = true;
+}
+
+
+async confirmDelete(): Promise<void> {
+  if (this.scenarioToDeleteIndex !== null) {
+    try {
+      const scenarioId = this.scenarios[this.scenarioToDeleteIndex].id;
+      await this.dataService.deleteData(scenarioId);
+      this.scenarios.splice(this.scenarioToDeleteIndex, 1);
+    } catch (error) {
+      console.error('Error deleting data', error);
+    }
   }
+  this.cancelDelete();
+}
+
+cancelDelete() {
+  this.scenarioToDeleteIndex = null;
+  this.showDeleteModal = false;
+}
+/*
+  async deleteScenario(index: number): Promise<void> {
+    try {
+      const scenarioId = this.scenarios[index].id;
+      await this.dataService.deleteData(scenarioId);
+      this.scenarios.splice(index, 1);
+    } catch (error) {
+      console.error('Error deleting data', error);
+    }
+  }*/
 
   openEditModal(index: number) {
-    this.editedStyleIndex = index;
-    this.editedStyleTitle = this.styles[index].title;
-    this.editedStyleDescription = this.styles[index].description;
+    this.editedScenarioIndex = index;
+    this.editedScenarioTitle = this.scenarios[index].titre;
+    this.editedScenarioDescription = this.scenarios[index].description;
     this.showEditModal = true;
   }
 
   closeEditModal() {
     this.showEditModal = false;
-    this.editedStyleIndex = null;
-    this.editedStyleTitle = '';
-    this.editedStyleDescription = '';
+    this.editedScenarioIndex = null;
+    this.editedScenarioTitle = '';
+    this.editedScenarioDescription = '';
   }
 
   saveEdit() {
-    if (this.editedStyleIndex !== null) {
-      const updatedStyle = this.styles[this.editedStyleIndex];
-      updatedStyle.title = this.editedStyleTitle;
-      updatedStyle.description = this.editedStyleDescription;
-      this.stylesService.setStyles(this.styles);
+    if (this.editedScenarioIndex !== null) {
+      const updatedScenario = this.scenarios[this.editedScenarioIndex];
+      updatedScenario.titre = this.editedScenarioTitle;
+      updatedScenario.description = this.editedScenarioDescription;
+      // Update the scenario in the service or send an update request to the API here
     }
     this.closeEditModal();
   }
@@ -84,19 +108,24 @@ export class EditStylesComponent {
 
   closeCreateModal() {
     this.showCreateModal = false;
-    this.newStyleTitle = '';
-    this.newStyleDescription = '';
-    this.newStyleImg = null;
+    this.newScenarioTitle = '';
+    this.newScenarioDescription = '';
+    this.newScenarioImg = null;
   }
 
   saveCreate() {
-    if (this.newStyleTitle && this.newStyleImg && this.newStyleDescription) {
-      this.stylesService.addStyle({
-        title: this.newStyleTitle, 
-        imgSrc: this.newStyleImg,
-        description: this.newStyleDescription,
-        });
-      this.styles = this.stylesService.getStyles();
+    if (
+      this.newScenarioTitle &&
+      this.newScenarioImg &&
+      this.newScenarioDescription
+    ) {
+      // Save the new scenario in the service or send a create request to the API here
+      this.scenarios.push({
+        id: this.scenarios.length + 1, // Temporary ID, replace with the one from the API if needed
+        titre: this.newScenarioTitle,
+        description: this.newScenarioDescription,
+        imgUrl: this.newScenarioImg,
+      });
     }
     this.closeCreateModal();
   }
@@ -106,7 +135,7 @@ export class EditStylesComponent {
     if (file) {
       const reader = new FileReader();
       reader.onload = (e: any) => {
-        this.newStyleImg = e.target.result;
+        this.newScenarioImg = e.target.result;
       };
       reader.readAsDataURL(file);
     }
