@@ -1,13 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
-import { MovieCardComponent } from '../../components/movie-card/movie-card.component';
 import { DataService, Scenario } from '../../services/dataSenario.service';
  
 @Component({
   selector: 'app-scenarios',
   standalone: true,
-  imports: [CommonModule, MovieCardComponent],
+  imports: [CommonModule],
   templateUrl: './scenarios.component.html',
   styleUrls: ['./scenarios.component.css'],
 })

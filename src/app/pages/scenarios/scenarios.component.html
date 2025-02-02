@@ -20,17 +20,18 @@
  
     <div class="w-full h-full flex flex-col items-center">
       <div
-        class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 w-full px-2 sm:px-4 lg:px-12 mt-4"
+        class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 w-full px-2 sm:px-4 lg:px-12"
       >
-        <app-movie-card
-          *ngFor="let scenario of scenarios; let i = index"
-          [id]="scenario.id.toString()"
-          [title]="scenario.titre"
-          [imgSrc]="scenario.imgUrl"
+        <div *ngFor="let scenario of scenarios; let i = index" 
           (click)="selectScenario(i)"
           [class.selected]="i === selectedScenarioIndex"
-          class="cursor-pointer hover:shadow-lg transition animate__animated animate__fadeInUp"
-        ></app-movie-card>
+          class="cursor-pointer flex flex-col items-center p-2 sm:p-4 border rounded-lg shadow-md hover:shadow-lg transition transform hover:scale-105 animate-fade-in-up"
+          [ngClass]="{'scale-110 border-blue-500 shadow-xl': i === selectedScenarioIndex}">
+          <img [src]="scenario.imgUrl" [alt]="scenario.titre" class="w-full h-48 object-cover block">
+          <div class="p-2">
+            <h3 class="text-lg font-semibold">{{ scenario.titre }}</h3>
+          </div>
+        </div>
       </div>
  
       <div

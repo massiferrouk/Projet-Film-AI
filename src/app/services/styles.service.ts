@@ -21,21 +21,6 @@ export class StylesService {
       imgSrc: 'la-casa-de-papel.jpg',
       description: 'description3'
     },
-    { 
-      title: 'La Casa de Papel', 
-      imgSrc: 'la-casa-de-papel.jpg',
-      description: 'description3'
-    },
-    { 
-      title: 'Vikings',
-      imgSrc: 'viking.jpg',
-      description: 'description2'
-    },
-    { 
-      title: 'Vikings',
-      imgSrc: 'viking.jpg',
-      description: 'description2'
-    },
   ];
 
   getStyles(): Style[] {

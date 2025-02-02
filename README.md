@@ -1,41 +1,107 @@
-# IA Movie App (Front-end)
+# laMovieApp
 
-![Bannière ou logo du projet] (optionnel)
+## Prérequis
 
-**IA Movie App** est une application web développée avec **Angular** et **TypeScript** qui permet aux utilisateurs de créer des scénarios personnalisés en collaboration avec une IA. L'utilisateur peut sélectionner un style de scénario, modifier ou ajouter des styles, créer des personnages, définir une trame narrative, et générer un scénario complet grâce à l'IA.
+Avant de lancer l'application Angular, assurez-vous d'avoir les éléments suivants installés sur votre machine :
 
----
+### 1. Node.js et npm
 
-## Fonctionnalités
+L'application Angular nécessite Node.js et npm pour fonctionner. Assurez-vous d'avoir Node.js installé (version 16 ou supérieure recommandée). Vous pouvez le vérifier avec les commandes suivantes :
 
-- **Sélection de style de scénario** : L'utilisateur choisit un style de scénario (par exemple, fantaisie, science-fiction, etc.).
-- **Modification des styles** : L'utilisateur peut modifier la description ou l'image d'un style, ajouter un nouveau style, ou supprimer un style existant.
-- **Création de personnages** : L'utilisateur peut ajouter des personnages, définir leurs traits de personnalité et leur apparence physique.
-- **Validation des personnages** : Des messages d'erreur s'affichent si les informations obligatoires ne sont pas renseignées.
-- **Trame narrative** : L'utilisateur peut définir une trame narrative pour relier les personnages.
-- **Génération de scénario** : L'IA génère un scénario complet basé sur les informations fournies par l'utilisateur.
-- **Affichage du scénario** : Le scénario généré est affiché dans une interface de lecture seule, avec un historique des discussions.
+```bash
+node -v
+npm -v
+```
 
----
+Si Node.js et npm ne sont pas installés, vous pouvez les télécharger depuis :
+https://nodejs.org/
 
-## Technologies utilisées
+### 2. Angular CLI
 
-- **Angular** : Version 19.0.0 (framework front-end).
-- **TypeScript** : Langage de programmation principal.
-- **TailwindCSS** : Version 3.4.17 (pour le styling moderne et responsive).
-- **Swiper** : Version 11.2.2 (pour les carrousels interactifs).
-- **Animate.css** : Version 4.1.1 (pour les animations CSS).
-- **FontAwesome** : Version 6.7.2 (pour les icônes).
-- **ngx-spinner** : Version 17.0.0 (pour les indicateurs de chargement).
-- **Angular Universal** : Version 19.0.5 (pour le rendu côté serveur).
-- **Three.js** : Version 0.172.0 (pour les graphiques 3D, si utilisés).
+Installez Angular CLI globalement sur votre machine si ce n'est pas encore fait :
 
----
+```bash
+npm install -g @angular/cli
+```
 
-## Installation
+Vérifiez l'installation en exécutant :
 
-Suivez ces étapes pour installer et lancer le projet en local :
+ng version
 
-1. Clonez le dépôt :
-   ```bash
-   git clone https://github.com/votre-utilisateur/ia-movie-app.git
+### 3. Backend Java + MySQL + IA Ollama
+
+L'application Angular se connecte à un backend qui utilise :
+
+JDK 17 (Assurez-vous d'avoir Java 17 installé)
+
+Serveur MySQL (Base de données "bandir")
+
+IA Ollama (version 3.2)
+
+Suivez la documentation du backend pour le configurer et le démarrer avant d'exécuter l'application Angular.
+
+Installation du Projet
+
+Clonez le projet depuis le dépôt :
+
+```bash
+git clone https://github.com/massiferrouk/Projet-Film-AI.git
+cd ia-movie-app
+```
+
+Installez les dépendances du projet :
+
+```bash
+npm install
+```
+
+Configuration
+
+L'application Angular doit être configurée pour communiquer avec l'API backend.
+
+Ouvrez le fichier src/environments/environment.ts et assurez-vous que l'URL de l'API est correcte :
+
+```bash
+export const environment = {
+  production: false,
+  apiUrl: 'http://localhost:8080/api/v1/chat'
+};
+```
+
+Si votre backend tourne sur un autre port, modifiez l'URL en conséquence.
+
+Lancer l'Application
+
+Une fois la configuration terminée, vous pouvez démarrer l'application en exécutant :
+
+```bash
+ng serve
+```
+
+L'application sera accessible à l'adresse suivante dans votre navigateur :
+
+```bash
+http://localhost:4200
+```
+
+Vérification du Fonctionnement
+
+Assurez-vous que le backend est bien démarré et accessible sur
+
+```bash
+http://localhost:8080
+```
+
+Vérifiez que MySQL et Ollama sont bien lancés
+
+Testez une requête en utilisant l'interface Angular pour générer un scénario via l'IA
+
+### Remarque
+
+Si vous rencontrez des problèmes de connexion avec l'API backend, assurez-vous que :
+
+Le serveur backend est bien en cours d'exécution
+
+Les CORS sont configurés correctement dans le backend
+
+L'URL de l'API est correcte dans environment.ts
