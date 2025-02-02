@@ -30,15 +30,13 @@ ng version
 
 ### 3. Backend Java + MySQL + IA Ollama
 
-L'application Angular se connecte à un backend qui utilise :
-
-JDK 17 (Assurez-vous d'avoir Java 17 installé)
-
-Serveur MySQL (Base de données "bandir")
-
-IA Ollama (version 3.2)
+L'application Angular se connecte à un backend
 
 Suivez la documentation du backend pour le configurer et le démarrer avant d'exécuter l'application Angular.
+
+```bash
+https://github.com/sfbad/fullStackYnov
+```
 
 Installation du Projet
 
