@@ -1,59 +1,41 @@
-# IaMovieApp
+# IA Movie App (Front-end)
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 19.0.5.
+![Bannière ou logo du projet] (optionnel)
 
-## Development server
+**IA Movie App** est une application web développée avec **Angular** et **TypeScript** qui permet aux utilisateurs de créer des scénarios personnalisés en collaboration avec une IA. L'utilisateur peut sélectionner un style de scénario, modifier ou ajouter des styles, créer des personnages, définir une trame narrative, et générer un scénario complet grâce à l'IA.
 
-To start a local development server, run:
+---
 
-```bash
-ng serve
-```
+## Fonctionnalités
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+- **Sélection de style de scénario** : L'utilisateur choisit un style de scénario (par exemple, fantaisie, science-fiction, etc.).
+- **Modification des styles** : L'utilisateur peut modifier la description ou l'image d'un style, ajouter un nouveau style, ou supprimer un style existant.
+- **Création de personnages** : L'utilisateur peut ajouter des personnages, définir leurs traits de personnalité et leur apparence physique.
+- **Validation des personnages** : Des messages d'erreur s'affichent si les informations obligatoires ne sont pas renseignées.
+- **Trame narrative** : L'utilisateur peut définir une trame narrative pour relier les personnages.
+- **Génération de scénario** : L'IA génère un scénario complet basé sur les informations fournies par l'utilisateur.
+- **Affichage du scénario** : Le scénario généré est affiché dans une interface de lecture seule, avec un historique des discussions.
 
-## Code scaffolding
+---
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+## Technologies utilisées
 
-```bash
-ng generate component component-name
-```
+- **Angular** : Version 19.0.0 (framework front-end).
+- **TypeScript** : Langage de programmation principal.
+- **TailwindCSS** : Version 3.4.17 (pour le styling moderne et responsive).
+- **Swiper** : Version 11.2.2 (pour les carrousels interactifs).
+- **Animate.css** : Version 4.1.1 (pour les animations CSS).
+- **FontAwesome** : Version 6.7.2 (pour les icônes).
+- **ngx-spinner** : Version 17.0.0 (pour les indicateurs de chargement).
+- **Angular Universal** : Version 19.0.5 (pour le rendu côté serveur).
+- **Three.js** : Version 0.172.0 (pour les graphiques 3D, si utilisés).
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+---
 
-```bash
-ng generate --help
-```
+## Installation
 
-## Building
+Suivez ces étapes pour installer et lancer le projet en local :
 
-To build the project run:
-
-```bash
-ng build
-```
-
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
-
-## Running unit tests
-
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
-
-```bash
-ng test
-```
-
-## Running end-to-end tests
-
-For end-to-end (e2e) testing, run:
-
-```bash
-ng e2e
-```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+1. Clonez le dépôt :
+   ```bash
+   git clone https://github.com/votre-utilisateur/ia-movie-app.git

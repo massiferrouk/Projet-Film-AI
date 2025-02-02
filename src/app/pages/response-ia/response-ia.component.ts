@@ -18,9 +18,11 @@ export class ResponseIaComponent implements OnInit {
   isLoading = false;
   selectedScenarioDetails: any = null;
   isDeleteConfirmationOpen = false;
-  scenarioToDelete: any; // Stocke l'ID du scénario à supprimer
-  selectedCharacter: any = null; // Personnage sélectionné pour voir les détails
-  successMessage: string | null = null;  
+  scenarioToDelete: any;
+  selectedCharacter: any = null;
+  successMessage: string | null = null;
+
+  isSidebarOpen = false;
 
   constructor(
     private movieService: MovieService,
@@ -31,13 +33,6 @@ export class ResponseIaComponent implements OnInit {
     this.loadScenarioList();
   }
 
-  @HostListener('document:click', ['$event'])
-  onClick(event: MouseEvent) {
-    if (this.isDeleteConfirmationOpen) {
-      this.closeDeleteConfirmation();
-    }
-  }
-
   loadScenarioList(): void {
     this.movieService.getScenarioList().subscribe({
       next: (data) => {
@@ -45,7 +40,7 @@ export class ResponseIaComponent implements OnInit {
           titre:  item.titre,
           id: item.id,
         }));
-
+ 
         if (this.discussions.length > 0) {
           this.selectedDiscussionIndex = this.discussions.length - 1;
           this.loadScenarioDetails(this.discussions[this.selectedDiscussionIndex].id);
@@ -60,8 +55,11 @@ export class ResponseIaComponent implements OnInit {
   selectDiscussion(index: number): void {
     this.selectedDiscussionIndex = index;
     this.loadScenarioDetails(this.discussions[index].id);
+    if (window.innerWidth < 768) {
+      this.isSidebarOpen = false;
+      document.body.style.overflow = 'auto';
+    }
   }
-  // Méthode pour récupérer les détails du scénario sélectionné
   loadScenarioDetails(scenarioId: number): void {
     this.isLoading = true;
     this.movieService.getScenarioDetails(scenarioId).subscribe({
@@ -77,64 +75,11 @@ export class ResponseIaComponent implements OnInit {
       },
     });
   }
+  
   generateNewScenario() {
     this.router.navigate(['/scenarios']);
   }
-  openDeleteConfirmation(scenarioId: number) {
-    this.scenarioToDelete = scenarioId;
-    this.isDeleteConfirmationOpen = true;
-    this.closeCharacterModal();
-  }
-  // Fermer le pop-up sans effectuer de suppression
-  closeDeleteConfirmation() {
-    this.isDeleteConfirmationOpen = false;
-    this.scenarioToDelete = null;
-  }
 
-  deleteScenario(): void {
-    if (this.scenarioToDelete) {
-      this.movieService.deleteScenario(this.scenarioToDelete).subscribe({
-        next: (response) => {
-          console.log('Scénario supprimé:', response);
-
-          this.discussions = this.discussions.filter(discussion => discussion.id !== this.scenarioToDelete);
-          this.closeDeleteConfirmation();
-        },
-      error:(err)=>{
-        console.error('Erreur lors de la suppression:', err);
-        this.closeDeleteConfirmation();
-      }
-    });
-    }
-
-  }
-  // Supprimer un personnage
-  deleteCharacter(): void {
-    if (this.selectedCharacter) {
-      this.movieService.deleteCharacter(this.selectedCharacter.id).subscribe({
-        next: (response) => {
-          this.selectedScenarioDetails.b = this.selectedScenarioDetails.b.filter((p: {
-            id: any;
-          }) => p.id !== this.selectedCharacter.id);
-          this.successMessage = response;
-
-          this.router.navigateByUrl('/response-ia', { skipLocationChange: true }).then(() => {
-            this.router.navigate([`/response-ia`]);
-          });
-
-          setTimeout(() => {
-            this.successMessage = null;
-          }, 3000);
-          this.closeDeleteConfirmation();
-        },
-        error: (err) => {
-          console.error('Erreur lors de la suppression:', err);
-          this.closeDeleteConfirmation();
-        },
-      });
-    }
-  }
-  // Ouvrir le modal de personnage
   openCharacterModal(character: any) {
     this.selectedCharacter = character;
     this.isDeleteConfirmationOpen = false;
@@ -144,5 +89,14 @@ export class ResponseIaComponent implements OnInit {
     this.selectedCharacter = null;
   }
 
+  toggleSidebar() {
+    this.isSidebarOpen = !this.isSidebarOpen;
+    if (this.isSidebarOpen) {
+      document.body.classList.add('overflow-hidden');
+    } else {
+      document.body.classList.remove('overflow-hidden');
+    }
+  }
+  
 
 }

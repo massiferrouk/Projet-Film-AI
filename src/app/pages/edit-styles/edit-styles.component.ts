@@ -1,10 +1,9 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { StylesService } from '../../services/styles.service';
-import { Style } from '../../models/style.model';
-
+import { DataService, Scenario } from '../../services/dataSenario.service';
+ 
 @Component({
   selector: 'app-edit-styles',
   standalone: true,
@@ -12,107 +11,158 @@ import { Style } from '../../models/style.model';
   templateUrl: './edit-styles.component.html',
   styleUrls: ['./edit-styles.component.css'],
 })
-export class EditStylesComponent {
-  styles: Style[] = [];
-  
+export class EditStylesComponent implements OnInit {
+  scenarios: Scenario[] = [];
   showEditModal = false;
   showCreateModal = false;
   showDeleteModal = false;
-
-  editedStyleIndex: number | null = null;
-  editedStyleTitle: string = '';
-  editedStyleDescription: string = '';
-
-  newStyleTitle: string = '';
-  newStyleDescription: string = '';
-  newStyleImg: string | null = null;
-
-  styleToDeleteIndex: number | null = null;
-
-  constructor(private router: Router, private stylesService: StylesService) {
-    this.styles = this.stylesService.getStyles();
+ 
+  editedScenarioIndex: number | null = null;
+  editedScenarioTitle: string = '';
+  editedScenarioDescription: string = '';
+ 
+  newScenarioTitle: string = '';
+  newScenarioDescription: string = '';
+  newScenarioImg: string | null = null;
+  newScenarioFileName: string | null = null;
+ 
+  scenarioToDeleteIndex: number | null = null;
+ 
+  constructor(private router: Router, private dataService: DataService) {}
+ 
+  ngOnInit(): void {
+    this.getScenarios();
   }
-
-  deleteStyle(index: number) {
-    // Ouvrir la modale de confirmation
-    this.styleToDeleteIndex = index;
+ 
+  getScenarios(): void {
+    this.dataService.getData().subscribe(
+      (response: Scenario[]) => {
+        this.scenarios = response;
+      },
+      (error) => {
+        console.error('Error fetching data', error);
+      }
+    );
+  }
+ 
+  deleteScenario(index: number) {
+    this.scenarioToDeleteIndex = index;
     this.showDeleteModal = true;
   }
-
-  confirmDelete() {
-    // Supprimer le style si l'index est défini
-    if (this.styleToDeleteIndex !== null) {
-      this.stylesService.deleteStyle(this.styleToDeleteIndex);
-      this.styles = this.stylesService.getStyles();
+ 
+  async confirmDelete(): Promise<void> {
+    if (this.scenarioToDeleteIndex !== null) {
+      try {
+        const scenarioId = this.scenarios[this.scenarioToDeleteIndex].id;
+        await this.dataService.deleteData(scenarioId);
+        this.scenarios.splice(this.scenarioToDeleteIndex, 1);
+      } catch (error) {
+        console.error('Error deleting data', error);
+      }
     }
-    this.cancelDelete(); // Fermer la modale
+    this.cancelDelete();
   }
-
+ 
   cancelDelete() {
-    // Réinitialiser les variables et fermer la modale
-    this.styleToDeleteIndex = null;
+    this.scenarioToDeleteIndex = null;
     this.showDeleteModal = false;
   }
-
+ 
   openEditModal(index: number) {
-    this.editedStyleIndex = index;
-    this.editedStyleTitle = this.styles[index].title;
-    this.editedStyleDescription = this.styles[index].description;
+    this.editedScenarioIndex = index;
+    this.editedScenarioTitle = this.scenarios[index].titre;
+    this.editedScenarioDescription = this.scenarios[index].description;
     this.showEditModal = true;
   }
-
+ 
   closeEditModal() {
     this.showEditModal = false;
-    this.editedStyleIndex = null;
-    this.editedStyleTitle = '';
-    this.editedStyleDescription = '';
+    this.editedScenarioIndex = null;
+    this.editedScenarioTitle = '';
+    this.editedScenarioDescription = '';
   }
-
-  saveEdit() {
-    if (this.editedStyleIndex !== null) {
-      const updatedStyle = this.styles[this.editedStyleIndex];
-      updatedStyle.title = this.editedStyleTitle;
-      updatedStyle.description = this.editedStyleDescription;
-      this.stylesService.setStyles(this.styles);
+ 
+  async saveEdit() {
+    if (this.editedScenarioIndex !== null) {
+      const updatedScenario: Scenario = {
+        id: this.scenarios[this.editedScenarioIndex].id,
+        titre: this.editedScenarioTitle,
+        description: this.editedScenarioDescription,
+        imgUrl: this.scenarios[this.editedScenarioIndex].imgUrl,
+      };
+ 
+      try {
+        await this.dataService.updateData(updatedScenario.id, updatedScenario);
+        this.scenarios[this.editedScenarioIndex] = updatedScenario;
+      } catch (error) {
+        console.error('Error updating data', error);
+      }
     }
     this.closeEditModal();
   }
-
+ 
   openCreateModal() {
     this.showCreateModal = true;
   }
-
+ 
   closeCreateModal() {
     this.showCreateModal = false;
-    this.newStyleTitle = '';
-    this.newStyleDescription = '';
-    this.newStyleImg = null;
+    this.newScenarioTitle = '';
+    this.newScenarioDescription = '';
+    this.newScenarioImg = null;
+    this.newScenarioFileName = null;
   }
-
-  saveCreate() {
-    if (this.newStyleTitle && this.newStyleImg && this.newStyleDescription) {
-      this.stylesService.addStyle({
-        title: this.newStyleTitle, 
-        imgSrc: this.newStyleImg,
-        description: this.newStyleDescription,
-        });
-      this.styles = this.stylesService.getStyles();
+ 
+  async saveCreate() {
+    if (
+      this.newScenarioTitle &&
+      this.newScenarioFileName &&
+      this.newScenarioDescription
+    ) {
+      const newScenario: Scenario = {
+        id: 0, // This will be ignored by the backend, replace with the actual ID if necessary
+        titre: this.newScenarioTitle,
+        description: this.newScenarioDescription,
+        imgUrl: this.newScenarioFileName,
+      };
+ 
+      try {
+        this.scenarios = await this.dataService.createData(newScenario);
+      } catch (error) {
+        console.error('Error creating data', error);
+      }
     }
     this.closeCreateModal();
   }
-
+ 
   onFileSelected(event: any) {
     const file = event.target.files[0];
     if (file) {
       const reader = new FileReader();
       reader.onload = (e: any) => {
-        this.newStyleImg = e.target.result;
+        const imgDataUrl = e.target.result;
+        this.newScenarioImg = imgDataUrl;
+        this.newScenarioFileName = file.name;
+        if (this.newScenarioFileName) {
+          // Sauvegarder l'image dans le répertoire public
+          this.saveImageToPublic(imgDataUrl, this.newScenarioFileName);
+        }
       };
       reader.readAsDataURL(file);
     }
   }
-
+ 
+  saveImageToPublic(dataUrl: string, fileName: string) {
+    const link = document.createElement('a');
+    link.href = dataUrl;
+    link.download = fileName;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  }
+ 
   goBack() {
     this.router.navigate(['/scenarios']);
   }
 }
+ 

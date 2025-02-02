@@ -18,8 +18,7 @@ img {
     background-color: rgba(0, 0, 0, 0.5);
     z-index: 5;
   }
-  
-/* Animations */
+
 @keyframes fade-in-down {
   from {
     opacity: 0;
@@ -75,7 +74,6 @@ img {
   }
 }
 
-/* Classes d'animation */
 .animate-fade-in-down {
   animation: fade-in-down 0.5s ease-out forwards;
 }

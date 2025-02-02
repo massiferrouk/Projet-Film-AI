@@ -1,10 +1,9 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { MovieCardComponent } from '../../components/movie-card/movie-card.component';
-import { StylesService } from '../../services/styles.service';
-import { Style } from '../../models/style.model';
-
+import { DataService, Scenario } from '../../services/dataSenario.service';
+ 
 @Component({
   selector: 'app-scenarios',
   standalone: true,
@@ -12,27 +11,45 @@ import { Style } from '../../models/style.model';
   templateUrl: './scenarios.component.html',
   styleUrls: ['./scenarios.component.css'],
 })
-export class ScenariosComponent {
-  styles: Style[] = [];
-  selectedStyleIndex: number=1 ;
-
-  constructor(private router: Router, private stylesService: StylesService) {
-    this.styles = this.stylesService.getStyles();
+export class ScenariosComponent implements OnInit {
+  scenarios: Scenario[] = [];
+  selectedScenarioIndex: number | null = null;
+  showModal: boolean = false;
+ 
+  constructor(private router: Router, private dataService: DataService) {}
+ 
+  ngOnInit(): void {
+    this.getScenarios();
   }
-
-  selectStyle(index: number) {
-    this.selectedStyleIndex = index;
+ 
+  getScenarios(): void {
+    this.dataService.getData().subscribe(
+      (response: Scenario[]) => {
+        this.scenarios = response;
+      },
+      (error) => {
+        console.error('Error fetching data', error);
+      }
+    );
   }
-
+ 
+  selectScenario(index: number) {
+    this.selectedScenarioIndex = index;
+  }
+ 
   goToNextPage() {
-    if (this.selectedStyleIndex !== null) {
-      //Le tableau commence par 0 et donc l'id du style aussi à 0,
-      // ainsi on ajoute 1 pour eviter de renvoyer un id=0 à l'api
-      const styleId = this.selectedStyleIndex+1;
-      this.router.navigate([`/scenariocreated2/${styleId}`]);
+    if (this.selectedScenarioIndex !== null) {
+      const scenarioId = this.scenarios[this.selectedScenarioIndex].id;
+      this.router.navigate([`/scenariocreated2/${scenarioId}`]);
+    } else {
+      this.showModal = true; // Afficher le modal si aucun scénario n'est sélectionné
     }
   }
 
+  closeModal() {
+    this.showModal = false; // Fermer le modal
+  }
+ 
   navigateToEditStyles() {
     this.router.navigate(['/edit-styles']);
   }

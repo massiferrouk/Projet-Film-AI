@@ -23,11 +23,10 @@ app-movie-card.selected {
   }
   
   .selected {
-    border: 2px solid #2563eb; /* Bleu fort pour indiquer la sélection */
-    background-color: #eff6ff; /* Bleu clair pour le fond */
+    border: 2px solid #2563eb;
+    background-color: #eff6ff;
   }
 
-  /* Animations */
 @keyframes fade-in {
   from {
     opacity: 0;
@@ -50,7 +49,6 @@ app-movie-card.selected {
   }
 }
 
-/* Appliquer les animations */
 .animate-fade-in {
   animation: fade-in 1s ease-out forwards;
 }
