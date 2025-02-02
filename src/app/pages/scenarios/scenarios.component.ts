@@ -41,12 +41,12 @@ export class ScenariosComponent implements OnInit {
       const scenarioId = this.scenarios[this.selectedScenarioIndex].id;
       this.router.navigate([`/scenariocreated2/${scenarioId}`]);
     } else {
-      this.showModal = true; // Afficher le modal si aucun scénario n'est sélectionné
+      this.showModal = true;
     }
   }
 
   closeModal() {
-    this.showModal = false; // Fermer le modal
+    this.showModal = false;
   }
  
   navigateToEditStyles() {

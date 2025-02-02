@@ -144,7 +144,6 @@ export class EditStylesComponent implements OnInit {
         this.newScenarioImg = imgDataUrl;
         this.newScenarioFileName = file.name;
         if (this.newScenarioFileName) {
-          // Sauvegarder l'image dans le répertoire public
           this.saveImageToPublic(imgDataUrl, this.newScenarioFileName);
         }
       };

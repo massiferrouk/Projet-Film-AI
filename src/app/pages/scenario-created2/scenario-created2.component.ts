@@ -194,12 +194,10 @@ export class ScenarioCreated2Component {
     this.router.navigate(['/scenarios']);
   }
 
-  // Ouvre le modal d'alerte
   showAlert() {
     this.showAlertModal = true;
   }
 
-  // Ferme le modal d'alerte
   closeAlertModal() {
     this.showAlertModal = false;
   }

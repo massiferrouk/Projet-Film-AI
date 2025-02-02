@@ -29,7 +29,6 @@ export class MovieService {
     return this.http.get(`${this.baseUrl}/scenarioList`);
   }
 
-  // Récupérer les détails d'un scénario
   getScenarioDetails(scenarioId: number): Observable<any> {
     const url = `${this.baseUrl}/scenarioDetail/${scenarioId}`;
     return this.http.get(url);
